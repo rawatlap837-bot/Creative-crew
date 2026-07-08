@@ -86,7 +86,7 @@ export default function Navbar() {
           openMenuButtonColor="#0a0a12"
           changeMenuColorOnOpen
           colors={['#B497CF', '#5227FF']}
-          logoUrl="/dist/cc.png"
+          logoUrl="./dist/cc.png"
           accentColor="#7c3aed"
           isFixed
         />
