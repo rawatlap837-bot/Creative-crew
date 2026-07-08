@@ -1,4 +1,5 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 
 export const StaggeredMenu = ({
@@ -17,7 +18,7 @@ export const StaggeredMenu = ({
     accentColor = '#5227FF',
     closeOnClickAway = true,
     onMenuOpen,
-    onMenuClose
+    onMenuClose,
 }) => {
     const [open, setOpen] = useState(false);
     const openRef = useRef(false);
@@ -98,7 +99,7 @@ export const StaggeredMenu = ({
         const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link'));
 
         const offscreen = position === 'left' ? -100 : 100;
-        const layerStates = layers.map(el => ({ el, start: offscreen }));
+        const layerStates = layers.map((el) => ({ el, start: offscreen }));
         const panelStart = offscreen;
 
         if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
@@ -116,12 +117,7 @@ export const StaggeredMenu = ({
         const panelInsertTime = lastTime + (layerStates.length ? 0.08 : 0);
         const panelDuration = 0.65;
 
-        tl.fromTo(
-            panel,
-            { xPercent: panelStart },
-            { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
-            panelInsertTime
-        );
+        tl.fromTo(panel, { xPercent: panelStart }, { xPercent: 0, duration: panelDuration, ease: 'power4.out' }, panelInsertTime);
 
         if (itemEls.length) {
             const itemsStartRatio = 0.15;
@@ -155,7 +151,7 @@ export const StaggeredMenu = ({
                         duration: 0.55,
                         ease: 'power3.out',
                         stagger: { each: 0.08, from: 'start' },
-                        onComplete: () => gsap.set(socialLinks, { clearProps: 'opacity' })
+                        onComplete: () => gsap.set(socialLinks, { clearProps: 'opacity' }),
                     },
                     socialsStart + 0.04
                 );
@@ -164,7 +160,7 @@ export const StaggeredMenu = ({
 
         openTlRef.current = tl;
         return tl;
-    }, []);
+    }, [position]);
 
     const playOpen = useCallback(() => {
         if (busyRef.current) return;
@@ -212,11 +208,11 @@ export const StaggeredMenu = ({
                 if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
 
                 busyRef.current = false;
-            }
+            },
         });
     }, [position]);
 
-    const animateIcon = useCallback(opening => {
+    const animateIcon = useCallback((opening) => {
         const icon = iconRef.current;
         const h = plusHRef.current;
         const v = plusVRef.current;
@@ -240,7 +236,7 @@ export const StaggeredMenu = ({
     }, []);
 
     const animateColor = useCallback(
-        opening => {
+        (opening) => {
             const btn = toggleBtnRef.current;
             if (!btn) return;
             colorTweenRef.current?.kill();
@@ -265,7 +261,7 @@ export const StaggeredMenu = ({
         }
     }, [changeMenuColorOnOpen, menuButtonColor, openMenuButtonColor]);
 
-    const animateText = useCallback(opening => {
+    const animateText = useCallback((opening) => {
         const inner = textInnerRef.current;
         if (!inner) return;
 
@@ -293,7 +289,7 @@ export const StaggeredMenu = ({
         textCycleAnimRef.current = gsap.to(inner, {
             yPercent: -finalShift,
             duration: 0.5 + lineCount * 0.07,
-            ease: 'power4.out'
+            ease: 'power4.out',
         });
     }, []);
 
@@ -330,7 +326,7 @@ export const StaggeredMenu = ({
     React.useEffect(() => {
         if (!closeOnClickAway || !open) return;
 
-        const handleClickOutside = event => {
+        const handleClickOutside = (event) => {
             if (
                 panelRef.current &&
                 !panelRef.current.contains(event.target) &&
@@ -352,18 +348,12 @@ export const StaggeredMenu = ({
             className={`sm-scope z-40 ${isFixed ? 'fixed top-0 left-0 w-screen h-screen overflow-hidden' : 'w-full h-full'}`}
         >
             <div
-                className={
-                    (className ? className + ' ' : '') + 'staggered-menu-wrapper pointer-events-none relative w-full h-full'
-                }
+                className={(className ? className + ' ' : '') + 'staggered-menu-wrapper pointer-events-none relative w-full h-full'}
                 style={accentColor ? { ['--sm-accent']: accentColor } : undefined}
                 data-position={position}
                 data-open={open || undefined}
             >
-                <div
-                    ref={preLayersRef}
-                    className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
-                    aria-hidden="true"
-                >
+                <div ref={preLayersRef} className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]" aria-hidden="true">
                     {(() => {
                         const raw = colors && colors.length ? colors.slice(0, 4) : ['#1e1e22', '#35353c'];
                         let arr = [...raw];
@@ -372,11 +362,7 @@ export const StaggeredMenu = ({
                             arr.splice(mid, 1);
                         }
                         return arr.map((c, i) => (
-                            <div
-                                key={i}
-                                className="sm-prelayer absolute top-0 right-0 h-full w-full translate-x-0"
-                                style={{ background: c }}
-                            />
+                            <div key={i} className="sm-prelayer absolute top-0 right-0 h-full w-full translate-x-0" style={{ background: c }} />
                         ));
                     })()}
                 </div>
@@ -450,26 +436,41 @@ export const StaggeredMenu = ({
                             data-numbering={displayItemNumbering || undefined}
                         >
                             {items && items.length ? (
-                                items.map((it, idx) => (
-                                    <li className="sm-panel-itemWrap relative overflow-hidden leading-none" key={it.label + idx}>
-                                        <a
-                                            className="sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
-                                            href={it.link}
-                                            aria-label={it.ariaLabel}
-                                            data-index={idx + 1}
-                                        >
-                                            <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
-                                                {it.label}
-                                            </span>
-                                        </a>
-                                    </li>
-                                ))
+                                items.map((it, idx) => {
+                                    const isInternal = typeof it.link === 'string' && it.link.startsWith('/');
+                                    return (
+                                        <li className="sm-panel-itemWrap relative overflow-hidden leading-none" key={it.label + idx}>
+                                            {isInternal ? (
+                                                <Link
+                                                    to={it.link}
+                                                    className="sm-panel-item relative text-black font-semibold text-[2.5rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
+                                                    aria-label={it.ariaLabel}
+                                                    data-index={idx + 1}
+                                                    onClick={closeMenu}
+                                                >
+                                                    <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
+                                                        {it.label}
+                                                    </span>
+                                                </Link>
+                                            ) : (
+                                                <a
+                                                    className="sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
+                                                    href={it.link}
+                                                    aria-label={it.ariaLabel}
+                                                    data-index={idx + 1}
+                                                >
+                                                    <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
+                                                        {it.label}
+                                                    </span>
+                                                </a>
+                                            )}
+                                        </li>
+                                    );
+                                })
                             ) : (
                                 <li className="sm-panel-itemWrap relative overflow-hidden leading-none" aria-hidden="true">
                                     <span className="sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]">
-                                        <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
-                                            No items
-                                        </span>
+                                        <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">No items</span>
                                     </span>
                                 </li>
                             )}
@@ -478,10 +479,7 @@ export const StaggeredMenu = ({
                         {displaySocials && socialItems && socialItems.length > 0 && (
                             <div className="sm-socials mt-auto pt-8 flex flex-col gap-3" aria-label="Social links">
                                 <h3 className="sm-socials-title m-0 text-base font-medium [color:var(--sm-accent,#ff0000)]">Socials</h3>
-                                <ul
-                                    className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-4 flex-wrap"
-                                    role="list"
-                                >
+                                <ul className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-4 flex-wrap" role="list">
                                     {socialItems.map((s, i) => (
                                         <li key={s.label + i} className="sm-socials-item">
                                             <a
@@ -517,8 +515,7 @@ export const StaggeredMenu = ({
 .sm-scope .sm-panel-itemWrap { position: relative; overflow: hidden; line-height: 1; }
 .sm-scope .sm-icon-line { position: absolute; left: 50%; top: 50%; width: 100%; height: 2px; background: currentColor; border-radius: 2px; transform: translate(-50%, -50%); will-change: transform; }
 .sm-scope .sm-line { display: none !important; }
-.sm-scope .staggered-menu-panel { poimport StaggeredMenu from '../../../ts-default/Components/StaggeredMenu/StaggeredMenu';
-sition: absolute; top: 0; right: 0; width: clamp(260px, 38vw, 420px); height: 100%; background: white; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 6em 2em 2em 2em; overflow-y: auto; z-index: 10; }
+.sm-scope .staggered-menu-panel { position: absolute; top: 0; right: 0; width: clamp(260px, 38vw, 420px); height: 100%; background: white; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 6em 2em 2em 2em; overflow-y: auto; z-index: 10; }
 .sm-scope [data-position='left'] .staggered-menu-panel { right: auto; left: 0; }
 .sm-scope .sm-prelayers { position: absolute; top: 0; right: 0; bottom: 0; width: clamp(260px, 38vw, 420px); pointer-events: none; z-index: 5; }
 .sm-scope [data-position='left'] .sm-prelayers { right: auto; left: 0; }
@@ -550,3 +547,4 @@ sition: absolute; top: 0; right: 0; width: clamp(260px, 38vw, 420px); height: 10
 };
 
 export default StaggeredMenu;
+
