@@ -4,6 +4,7 @@ import SectionHeading from '../components/SectionHeading'
 import CtaBanner from '../components/CtaBanner'
 import Testimonials from '../components/TestimonialsSection'
 import { values, timeline, teamMembers } from '../data/siteData'
+import { Rocket, Globe, Award } from 'lucide-react'
 
 export default function About() {
   return (
@@ -36,21 +37,44 @@ function Hero() {
 
 function MissionVisionBelief() {
   const items = [
-    { title: 'Our Mission', desc: 'To make premium design and engineering accessible to founders who care about craft.' },
-    { title: 'Our Vision', desc: 'A world where every ambitious brand looks and performs like a category leader.' },
-    { title: 'Our Belief', desc: 'Great work happens at the intersection of taste, systems, and speed.' },
+    {
+      title: 'Our Mission',
+      desc: 'To make premium design and engineering accessible to founders who care about craft.',
+      icon: Rocket,
+    },
+    {
+      title: 'Our Vision',
+      desc: 'A world where every ambitious brand looks and performs like a category leader.',
+      icon: Globe,
+    },
+    {
+      title: 'Our Belief',
+      desc: 'Great work happens at the intersection of taste, systems, and speed.',
+      icon: Award,
+    },
   ]
   return (
-    <section className="bg-white py-20 px-6">
+    <section className="bg-[#0a0a12] py-20 sm:py-24 px-6">
       <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-5">
-        {items.map((it, i) => (
-          <Reveal key={it.title} delay={i * 0.08}>
-            <div className="rounded-2xl border border-[#0a0a12]/10 p-7 h-full">
-              <h3 className="text-lg font-bold text-[#0a0a12] mb-2">{it.title}</h3>
-              <p className="text-[14px] text-[#0a0a12]/60 leading-relaxed">{it.desc}</p>
-            </div>
-          </Reveal>
-        ))}
+        {items.map((it, i) => {
+          const Icon = it.icon
+          return (
+            <Reveal key={it.title} delay={i * 0.08}>
+              <div className="group relative rounded-2xl border border-white/10 bg-white/[0.02] p-7 h-full overflow-hidden transition-all duration-300 hover:border-violet-500/40 hover:bg-white/[0.04]">
+                {/* glow on hover */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-violet-500/0 group-hover:bg-violet-500/20 rounded-full blur-[40px] transition-all duration-500" />
+
+                <div className="relative">
+                  <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-white/10 mb-5">
+                    <Icon size={19} className="text-violet-300" />
+                  </span>
+                  <h3 className="text-lg font-bold text-white mb-2">{it.title}</h3>
+                  <p className="text-[14px] text-white/55 leading-relaxed">{it.desc}</p>
+                </div>
+              </div>
+            </Reveal>
+          )
+        })}
       </div>
     </section>
   )
@@ -58,18 +82,22 @@ function MissionVisionBelief() {
 
 function Values() {
   return (
-    <section className="bg-white pb-24 px-6">
+    <section className="bg-[#0a0a12] pb-24 sm:pb-28 px-6">
       <div className="max-w-6xl mx-auto">
         <Reveal>
           <SectionHeading eyebrow="Values" title="What we" accent="stand for" align="left" />
         </Reveal>
-        <div className="mt-10 grid sm:grid-cols-2 gap-5">
+
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {values.map((v, i) => (
             <Reveal key={v.n} delay={i * 0.07}>
-              <div className="rounded-2xl bg-[#0a0a12] p-7 h-full">
-                <p className="text-xs font-semibold text-violet-400 mb-3">{v.n}</p>
-                <h3 className="text-lg font-bold text-white mb-2">{v.title}</h3>
-                <p className="text-[14px] text-white/55 leading-relaxed">{v.desc}</p>
+              <div className="relative rounded-2xl bg-white/[0.03] border border-white/10 pl-6 pr-6 py-6 h-full overflow-hidden hover:border-white/20 transition-colors duration-300">
+                {/* colored gradient accent bar, left edge */}
+                <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-violet-500 via-fuchsia-500 to-orange-400" />
+
+                <p className="text-xs font-semibold text-violet-400 mb-3 tracking-wide">{v.n}</p>
+                <h3 className="text-base sm:text-lg font-bold text-white mb-2 leading-snug">{v.title}</h3>
+                <p className="text-[13.5px] sm:text-[14px] text-white/55 leading-relaxed">{v.desc}</p>
               </div>
             </Reveal>
           ))}
@@ -78,7 +106,6 @@ function Values() {
     </section>
   )
 }
-
 function Timeline() {
   return (
     <section className="bg-[#0a0a12] py-24 px-6">

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Clock, Instagram, Twitter, Linkedin, Youtube, Check } from 'lucide-react'
+import { Listbox } from '@headlessui/react'
+import { Mail, Phone, MapPin, Clock, Instagram, Twitter, Linkedin, Youtube, Check, ChevronDown } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
@@ -38,6 +39,7 @@ function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  const updateBudget = (value) => setForm((f) => ({ ...f, budget: value }))
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -96,13 +98,34 @@ function ContactForm() {
       </div>
 
       <Field label="Budget" className="mb-5">
-        <select value={form.budget} onChange={update('budget')} className={inputClass()}>
-          {budgetOptions.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </select>
+        <Listbox value={form.budget} onChange={updateBudget}>
+          <div className="relative">
+            <Listbox.Button className={`${inputClass()} flex items-center justify-between text-left`}>
+              <span>{form.budget}</span>
+              <ChevronDown size={15} className="text-white/40 shrink-0" />
+            </Listbox.Button>
+
+            <Listbox.Options className="absolute z-30 mt-2 w-full rounded-xl border border-white/10 bg-[#141221] shadow-xl overflow-hidden focus:outline-none">
+              {budgetOptions.map((b) => (
+                <Listbox.Option
+                  key={b}
+                  value={b}
+                  className={({ active }) =>
+                    `flex items-center justify-between px-4 py-2.5 text-[14px] cursor-pointer transition-colors ${active ? 'bg-violet-500/15 text-white' : 'text-white/70'
+                    }`
+                  }
+                >
+                  {({ selected }) => (
+                    <>
+                      <span>{b}</span>
+                      {selected && <Check size={14} className="text-violet-400" />}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </div>
+        </Listbox>
       </Field>
 
       <Field label="Tell us about your project" error={errors.message} className="mb-7">
@@ -136,9 +159,8 @@ function Field({ label, error, children, className = '' }) {
 }
 
 function inputClass(error) {
-  return `w-full rounded-xl bg-white/5 border px-4 py-3 text-[14px] text-white placeholder:text-white/30 focus:outline-none transition-colors ${
-    error ? 'border-rose-400/60' : 'border-white/10 focus:border-violet-400/60'
-  }`
+  return `w-full rounded-xl bg-white/5 border px-4 py-3 text-[14px] text-white placeholder:text-white/30 focus:outline-none transition-colors ${error ? 'border-rose-400/60' : 'border-white/10 focus:border-violet-400/60'
+    }`
 }
 
 function ContactInfo() {
@@ -176,6 +198,7 @@ function ContactInfo() {
         <p className="text-[11px] uppercase tracking-wide text-white/40 mb-3">Follow</p>
         <div className="flex items-center gap-2.5">
           {[Instagram, Twitter, Linkedin, Youtube].map((Icon, i) => (
+
             <a
               key={i}
               href="#"

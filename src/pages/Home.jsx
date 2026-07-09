@@ -14,6 +14,8 @@ import BlurText from '../animations/BlurText'
 import {
   capabilities, stats, processSteps, trustedBrands, faqs, portfolioItems,
 } from '../data/siteData'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
+
 
 const iconMap = { Rocket, Share2, Globe, Code2, GraduationCap, ShoppingBag, Palette, Clapperboard }
 const statIconMap = [Users, Award, TrendingUp, Headphones]
@@ -231,10 +233,6 @@ function TrustedBy() {
     </section>
   )
 }
-
-import { motion } from "framer-motion"
-import { useState } from "react"
-
 function CapabilityCard({ c, i, Icon }) {
   const [active, setActive] = useState(false)
 
@@ -405,26 +403,58 @@ function Difference() {
   )
 }
 
+
+
+
+
 function Process() {
   return (
-    <section className="bg-white py-24 px-6">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative bg-white py-16 sm:py-24 px-6 overflow-hidden">
+      {/* ambient glow behind the animation panel — now on the right */}
+      <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative">
         <Reveal>
           <SectionHeading eyebrow="Our process" title="A six-step system," accent="engineered to win" align="left" />
         </Reveal>
 
-        <div className="relative mt-14 ml-3">
-          <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-violet-400 via-fuchsia-300 to-transparent" />
-          {processSteps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.06} className="relative pl-10 pb-12 last:pb-0">
-              <span className="absolute -left-[9px] top-1 w-[18px] h-[18px] rounded-full bg-white border-2 border-violet-500 flex items-center justify-center">
-                <span className="w-[7px] h-[7px] rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500" />
-              </span>
-              <p className="text-xs font-semibold text-violet-500 mb-1">{s.n}</p>
-              <h3 className="text-xl font-bold text-[#0a0a12] mb-1">{s.title}</h3>
-              <p className="text-[14px] text-[#0a0a12]/55 max-w-md">{s.desc}</p>
+        <div className="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          {/* Timeline — first in source order, so left on desktop / top on mobile */}
+          <div className="relative order-2 lg:order-1 mt-4 lg:mt-0">
+            <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-violet-400 via-fuchsia-300 to-transparent" />
+            {processSteps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 0.06} className="relative pl-10 pb-10 sm:pb-12 last:pb-0">
+                <span className="absolute -left-[9px] top-1 w-[18px] h-[18px] rounded-full bg-white border-2 border-violet-500 flex items-center justify-center">
+                  <span className="w-[7px] h-[7px] rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500" />
+                </span>
+                <p className="text-xs font-semibold text-violet-500 mb-1">{s.n}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-[#0a0a12] mb-1">{s.title}</h3>
+                <p className="text-[13.5px] sm:text-[14px] text-[#0a0a12]/55 max-w-md">{s.desc}</p>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Animation panel — now on the right on desktop, shows above timeline on mobile */}
+          <div className="order-1 lg:order-2 lg:sticky lg:top-28">
+            <Reveal>
+              <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-5 sm:p-8">
+                <div className="w-full h-[220px] sm:h-[320px] lg:h-[380px]">
+                  <DotLottieReact
+                    src="https://lottie.host/b053bae1-9ead-45cf-90aa-49acc580a6cc/ar3BS1uO71.lottie"
+                    loop
+                    autoplay
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+
+                {/* floating badge — moved to right edge to match new position */}
+                <div className="absolute -bottom-3 right-4 sm:-bottom-4 sm:-right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-card">
+                  <p className="text-[9px] sm:text-[10px] text-[#0a0a12]/40">Avg. delivery time</p>
+                  <p className="text-[13px] sm:text-sm font-bold text-violet-600">3.5 weeks</p>
+                </div>
+              </div>
             </Reveal>
-          ))}
+          </div>
         </div>
       </div>
     </section>
