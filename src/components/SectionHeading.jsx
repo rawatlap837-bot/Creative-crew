@@ -44,11 +44,10 @@ export default function SectionHeading({
               }`}
           >
             {accent}
+            <span className={titleColor}>.</span>
           </span>
         )}
-        <span className={titleColor}>.</span>
       </h2>
-
       {subtitle && (
         <p className={`mt-4 max-w-2xl text-[15px] leading-relaxed ${subColor}`}>{subtitle}</p>
       )}
