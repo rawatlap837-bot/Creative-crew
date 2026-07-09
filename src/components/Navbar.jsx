@@ -20,7 +20,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // StaggeredMenu expects { label, ariaLabel, link } — map from your existing navLinks
   const menuItems = navLinks.map((l) => ({
     label: l.label,
     ariaLabel: `Go to ${l.label}`,
@@ -29,7 +28,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Desktop navbar — unchanged, just scoped to md+ */}
+      {/* Desktop navbar */}
       <header
         className={`hidden md:block fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0a12]/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'
           }`}
@@ -58,8 +57,8 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
-            <a
-              href="tel:+14155550142"
+
+            <a href="tel:+14155550142"
               className="flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/30 transition-colors"
               aria-label="Call us"
             >
@@ -75,7 +74,29 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile — StaggeredMenu owns its own logo, toggle button, and full-screen panel */}
+      {/* Mobile top bar — gives the header actual presence instead of a bare toggle in a corner */}
+      <div
+        className={`md:hidden fixed top-0 inset-x-0 z-40 flex items-center justify-between px-4 h-16 transition-all duration-300 ${scrolled ? 'bg-[#0a0a12]/90 backdrop-blur-md border-b border-white/10' : 'bg-gradient-to-b from-[#0a0a12]/70 to-transparent'
+          }`}
+      >
+        <Link to="/" className="flex items-center gap-2">
+          <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-[0_0_18px_rgba(124,58,237,0.5)]">
+            <Sparkles size={14} className="text-white" strokeWidth={2.5} />
+          </span>
+          <span className="text-white font-semibold tracking-tight text-[15px]">Creative Crew</span>
+        </Link>
+
+
+        <a
+          href="tel:+14155550142"
+          className="flex items-center justify-center w-9 h-9 rounded-full border border-white/15 text-white/80 hover:text-white hover:border-white/30 transition-colors"
+          aria-label="Call us"
+        >
+          <Phone size={14} />
+        </a>
+      </div>
+
+      {/* StaggeredMenu owns the toggle + panel, positioned over the top bar */}
       <div className="md:hidden">
         <StaggeredMenu
           position="right"
@@ -86,7 +107,7 @@ export default function Navbar() {
           menuButtonColor="#ffffff"
           openMenuButtonColor="#0a0a12"
           changeMenuColorOnOpen
-          colors={['#B497CF', '#5227FF']}
+          colors={['#B497CF', '#5227FF', '#7c3aed']}
           logoUrl={cc}
           logoAlt="Creative Crew"
           logoWidth={32}
