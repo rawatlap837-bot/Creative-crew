@@ -415,10 +415,10 @@ function Process() {
 
       <div className="max-w-6xl mx-auto relative">
         <Reveal>
-          <SectionHeading eyebrow="Our process" title="A six-step system," accent="engineered to win" align="left" />
+          <SectionHeading eyebrow="Our process" title="A six-step system," accent=" Built to win" align="left" />
         </Reveal>
 
-        <div className="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Timeline — first in source order, so left on desktop / top on mobile */}
           <div className="relative order-2 lg:order-1 mt-4 lg:mt-0">
             <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-violet-400 via-fuchsia-300 to-transparent" />

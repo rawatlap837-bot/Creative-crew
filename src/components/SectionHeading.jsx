@@ -16,7 +16,7 @@ export default function SectionHeading({
   const [accentVisible, setAccentVisible] = useState(false)
 
   return (
-    <div className={`flex flex-col ${alignment}`}>
+    <div className={`flex flex-col mb-3 ${alignment}`}>
       {eyebrow && (
         <div className={`flex items-center gap-2.5 mb-6! ${isCenter ? 'justify-center' : ''}`}>
           <span className="w-6 h-px bg-gradient-to-r from-violet-500 to-fuchsia-400" />
@@ -27,7 +27,7 @@ export default function SectionHeading({
       )}
 
       <h2
-        className={`text-4xl sm:text-5xl font-bold tracking-[-0.02em] !leading-[1.2] ${titleColor} flex flex-wrap gap-x-2 gap-y-1 sm:gap-y-2 ${isCenter ? 'justify-center' : ''
+        className={`text-4xl sm:text-5xl font-bold tracking-[-0.02em] !leading-[1.2] ${titleColor} flex flex-wrap gap-x-2 gap-y-1 sm:gap-y-4 ${isCenter ? 'justify-center' : ''
           }`}
       >
         <BlurText
