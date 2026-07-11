@@ -21,6 +21,7 @@ export default function Navbar() {
   }, [])
 
   const menuItems = navLinks.map((l) => ({
+
     label: l.label,
     ariaLabel: `Go to ${l.label}`,
     link: l.to,
@@ -35,11 +36,11 @@ export default function Navbar() {
       >
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 h-[72px]">
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <img src={cc} alt="Creative Crew" className="h-8 w-auto object-contain" draggable={false} />
-            <span className="text-white font-semibold tracking-tight text-[15px]">Creative Crew</span>
+            <img src={cc} alt="Creative Crew" className="h-12 w-auto object-contain" draggable={false} />
+            <span className="text-white font-semibold tracking-tight text-base">Creative Crew</span>
           </Link>
 
-          <ul className="flex items-center gap-9 text-[13.5px] text-white/70">
+          <ul className="flex items-center gap-9 text-[15px] text-white/70">
             {navLinks.map((l) => (
               <li key={l.label}>
                 <NavLink
@@ -55,6 +56,7 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
+
             <a
               href="tel:+14155550142"
               className="flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/30 transition-colors"
@@ -62,35 +64,40 @@ export default function Navbar() {
             >
               <Phone size={13} />
             </a>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white text-[#0a0a12] text-[13px] font-semibold px-4 py-2.5 hover:bg-violet-100 transition-colors"
-            >
-              Book a call
-            </Link>
+
+            <div className="relative group">
+              {/* blurred glow behind the button, hidden until hover */}
+              <div className="absolute inset-0 rounded-full bg-violet-400/60 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+              <Link
+                to="/contact"
+                className="relative inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-md text-[#0a0a12] text-[14px] font-semibold px-4 py-2.5 border border-white/20 shadow-sm hover:bg-white/70 transition-colors duration-300"
+              >
+                Book a call
+              </Link>
+            </div>
+          </div>
+          {/* Mobile — StaggeredMenu owns its own logo, toggle, and panel */}
+          <div className="md:hidden">
+            <StaggeredMenu
+              position="right"
+              items={menuItems}
+              socialItems={socialItems}
+              displaySocials
+              displayItemNumbering
+              menuButtonColor="#ffffff"
+              openMenuButtonColor="#ffffff"
+              changeMenuColorOnOpen={false}
+              colors={['#7c3aed', '#0a0a12']}
+              logoUrl={cc}
+              logoAlt="Creative Crew"
+              logoWidth={32}
+              accentColor="#c4b5fd"
+              isFixed
+            />
           </div>
         </nav>
       </header>
-
-      {/* Mobile — StaggeredMenu owns its own logo, toggle, and panel */}
-      <div className="md:hidden">
-        <StaggeredMenu
-          position="right"
-          items={menuItems}
-          socialItems={socialItems}
-          displaySocials
-          displayItemNumbering
-          menuButtonColor="#ffffff"
-          openMenuButtonColor="#ffffff"
-          changeMenuColorOnOpen={false}
-          colors={['#7c3aed', '#0a0a12']}
-          logoUrl={cc}
-          logoAlt="Creative Crew"
-          logoWidth={32}
-          accentColor="#c4b5fd"
-          isFixed
-        />
-      </div>
     </>
   )
 }

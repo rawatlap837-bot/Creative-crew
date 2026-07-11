@@ -6,9 +6,9 @@ export const siteConfig = {
   name: 'Creative Crew',
   tagline: 'Let\'s build something unforgettable.',
   email: 'hello@creativecrew.studio',
-  phone: '+1 (415) 555-0142',
+  phone: '+91 123 456 7890',
   location: 'Remote-first · San Francisco · Berlin',
-  hours: 'Mon–Fri · 9am–7pm PT',
+  hours: 'Mon–Sat · 8am–7pm PT',
 }
 
 // Top nav + footer both read from this so links always match routes
@@ -60,17 +60,27 @@ export const trustedBrands = [
 ]
 
 export const capabilities = [
-  // Arranged to match the natural buyer journey on the Home page:
-  // Brand & attention → Funnel & conversion → Web & content → Platforms → Automation/software.
-  { icon: 'Palette', title: 'Branding & Graphic Design', desc: 'Visual identities that feel iconic.' },
-  { icon: 'Clapperboard', title: 'Video Editing', desc: 'Cinematic edits that stop the scroll.' },
-  { icon: 'Share2', title: 'Social Media Marketing', desc: 'Content, ads, and community that compound.' },
-  { icon: 'Rocket', title: 'NCF Funnel Development', desc: 'High-converting sales funnels engineered end-to-end.' },
-  { icon: 'Globe', title: 'Website Development', desc: 'Editorial-grade websites built for scale.' },
-  { icon: 'GraduationCap', title: 'LMS Development', desc: 'Beautiful learning platforms that convert.' },
-  { icon: 'ShoppingBag', title: 'POS Software', desc: 'Retail-ready systems built to last.' },
-  { icon: 'Code2', title: 'Software Development', desc: 'Custom apps, dashboards, automation.' },
-]
+  {
+    icon: 'Globe',
+    title: 'Website Development',
+    desc: 'Editorial-grade websites built for scale.',
+  },
+  {
+    icon: 'Code2',
+    title: 'CMS Platforms',
+    desc: 'Flexible content systems your team can actually manage.',
+  },
+  {
+    icon: 'Share2',
+    title: 'Social Media Management',
+    desc: 'Content, ads, and community that compound.',
+  },
+  {
+    icon: 'Rocket',
+    title: 'Funnel Marketing',
+    desc: 'High-converting sales funnels engineered end-to-end.',
+  },
+] 
 
 
 export const stats = [
@@ -81,12 +91,12 @@ export const stats = [
 ]
 
 export const processSteps = [
-  { n: '01', title: 'Discovery', desc: 'Deep dive into your goals, users, and unfair advantages.' },
-  { n: '02', title: 'Strategy', desc: 'Positioning, funnels, KPIs — the master plan.' },
-  { n: '03', title: 'Design', desc: 'Editorial visuals crafted pixel-by-pixel.' },
-  { n: '04', title: 'Development', desc: 'Fast, scalable, production-grade builds.' },
-  { n: '05', title: 'Launch', desc: 'A polished go-live your customers remember.' },
-  { n: '06', title: 'Growth', desc: 'Iterate, optimize, compound — every week.' },
+  { n: "01", title: "Discovery", desc: "Deep dive into your goals, users, and unfair advantages.", accent: "from-violet-500 to-fuchsia-500", lottie: "https://lottie.host/478c95b1-ea5c-4ceb-9830-fd68bc093d71/6YvIsM383M.lottie" },
+  { n: "02", title: "Strategy", desc: "Positioning, funnels, KPIs — the master plan.", accent: "from-indigo-500 to-violet-500", lottie: "https://lottie.host/ecdad5e9-0856-4562-90cc-53597f00807b/Di4rkinwxG.lottie" },
+  { n: "03", title: "Design", desc: "Editorial visuals crafted pixel-by-pixel.", accent: "from-fuchsia-500 to-pink-500", lottie: "https://lottie.host/6187491a-8ba1-4b85-af32-5937c77d548d/88NmGc7ZJ6.lottie" },
+  { n: "04", title: "Development", desc: "Fast, scalable, production-grade builds.", accent: "from-blue-500 to-violet-500", lottie: "https://lottie.host/f94b1858-6da9-4659-8e58-886a73c45363/s9v42HEscb.lottie" },
+  { n: "05", title: "Launch", desc: "A polished go-live your customers remember.", accent: "from-violet-500 to-purple-500", lottie: "https://lottie.host/4117192c-b817-4d64-8f12-35126a0db0e7/BYtrKA44hI.lottie" },
+  { n: "06", title: "Growth", desc: "Iterate, optimize, compound — every week.", accent: "from-fuchsia-500 to-rose-500", lottie: "https://lottie.host/76bd5d4d-0d46-4515-8cc1-0819492469df/AHrXtcpk4H.lottie" },
 ]
 
 export const services = [
@@ -122,22 +132,6 @@ export const services = [
     stack: ['Node', 'Postgres', 'Next.js', 'AWS'],
     price: 'From $15k',
   },
-  {
-    n: '05', icon: 'GraduationCap', title: 'LMS Development',
-    tagline: 'Learning platforms that convert students.',
-    desc: 'Beautiful, monetizable, retention-first learning experiences.',
-    features: ['Courses', 'Cohorts', 'Payments', 'Certificates'],
-    stack: ['Next.js', 'Stripe', 'Mux', 'Postgres'],
-    price: 'From $12k',
-  },
-  {
-    n: '06', icon: 'ShoppingBag', title: 'POS Software',
-    tagline: 'Point-of-sale that just works.',
-    desc: 'Retail-ready systems with inventory, billing, and analytics baked in.',
-    features: ['Inventory', 'Billing', 'Reports', 'Multi-store'],
-    stack: ['Electron', 'React', 'Postgres', 'PWA'],
-    price: 'From $18k',
-  },
 ]
 
 export const faqs = [
@@ -156,17 +150,17 @@ export const testimonials = [
 ]
 
 export const portfolioItems = [
-  { title: 'Nova POS Dashboard', category: 'Software', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80' },
-  { title: 'Kairos Learning Platform', category: 'Web', img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80' },
-  { title: 'Orbit Studios Identity', category: 'Graphic Design', img: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&q=80' },
-  { title: 'Helix Reels Series', category: 'Video Editing', img: 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=800&q=80' },
+  { title: 'Post Website', category: 'Software', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80' },
+  { title: 'LMS Platforms', category: 'Web', img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80' },
+  { title: 'Social media mangment', category: 'Graphic Design', img: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&q=80' },
+  { title: 'Funnel Marketing', category: 'Video Editing', img: 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=800&q=80' },
   { title: 'Meridian NCF Funnel', category: 'Web', img: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80' },
   { title: 'Nova Campaign Film', category: 'Video Editing', img: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=800&q=80' },
   { title: 'Quanta Analytics UI', category: 'Software', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80' },
   { title: 'Velvet Poster Series', category: 'Graphic Design', img: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80' },
 ]
 
-export const filterCategories = ['All', 'Graphic Design', 'Video Editing', 'Web', 'Software']
+export const filterCategories = ['All', 'Marketing', 'Social Media','Software', 'Web' ]
 
 export const teamMembers = [
   { name: 'Aarav Mehta', role: 'Founder & Creative Director', img: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&q=80' },

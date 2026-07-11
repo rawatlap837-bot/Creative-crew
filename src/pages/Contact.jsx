@@ -4,7 +4,12 @@ import { Mail, Phone, MapPin, Clock, Instagram, Twitter, Linkedin, Youtube, Chec
 import PageTransition from '../components/PageTransition'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
-import { siteConfig, budgetOptions } from '../data/siteData'
+import { siteConfig, budgetOptions, services } from '../data/siteData'
+
+// Replace with your deployed Google Apps Script Web App URL (see setup notes below)
+const GOOGLE_SHEET_ENDPOINT = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'
+
+const serviceOptions = services.map((s) => s.title)
 
 export default function Contact() {
   return (
@@ -34,23 +39,57 @@ export default function Contact() {
 }
 
 function ContactForm() {
-  const [form, setForm] = useState({ name: '', email: '', budget: budgetOptions[2], message: '' })
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: serviceOptions[0] || '',
+    budget: budgetOptions[2],
+    message: '',
+  })
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
   const updateBudget = (value) => setForm((f) => ({ ...f, budget: value }))
+  const updateService = (value) => setForm((f) => ({ ...f, service: value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const next = {}
     if (!form.name.trim()) next.name = 'Please enter your name.'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Please enter a valid email.'
+    if (!form.phone.trim()) next.phone = 'Please enter your phone number.'
+    else if (!/^[0-9+\-\s()]{7,}$/.test(form.phone.trim())) next.phone = 'Please enter a valid phone number.'
+    if (!form.service) next.service = 'Please select a service.'
     if (!form.message.trim()) next.message = 'Tell us a bit about your project.'
     setErrors(next)
-    if (Object.keys(next).length === 0) {
-      // Wire this up to your backend / form service (e.g. Formspree, Resend) here.
+    if (Object.keys(next).length > 0) return
+
+    setSubmitting(true)
+    setSubmitError('')
+    try {
+      await fetch(GOOGLE_SHEET_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors', // Apps Script web apps don't return CORS headers by default
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          service: form.service,
+          budget: form.budget,
+          message: form.message,
+          submittedAt: new Date().toISOString(),
+        }),
+      })
       setSubmitted(true)
+    } catch (err) {
+      setSubmitError('Something went wrong sending your message. Please try again.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -80,7 +119,7 @@ function ContactForm() {
         <Field label="Your name" error={errors.name}>
           <input
             type="text"
-            placeholder="Jane Doe"
+            placeholder="Arman rawat"
             value={form.name}
             onChange={update('name')}
             className={inputClass(errors.name)}
@@ -94,6 +133,51 @@ function ContactForm() {
             onChange={update('email')}
             className={inputClass(errors.email)}
           />
+        </Field>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-5 mb-5">
+        <Field label="Phone number" error={errors.phone}>
+          <input
+            type="tel"
+            placeholder="+91 123 456 7890"
+            value={form.phone}
+            onChange={update('phone')}
+            className={inputClass(errors.phone)}
+          />
+        </Field>
+
+        <Field label="Service" error={errors.service}>
+          <Listbox value={form.service} onChange={updateService}>
+            <div className="relative">
+              <Listbox.Button className={`${inputClass(errors.service)} flex items-center justify-between text-left`}>
+                <span className={form.service ? '' : 'text-white/30'}>
+                  {form.service || 'Select a service'}
+                </span>
+                <ChevronDown size={15} className="text-white/40 shrink-0" />
+              </Listbox.Button>
+
+              <Listbox.Options className="absolute z-30 mt-2 w-full rounded-xl border border-white/10 bg-[#141221] shadow-xl overflow-hidden focus:outline-none max-h-60 overflow-y-auto">
+                {serviceOptions.map((s) => (
+                  <Listbox.Option
+                    key={s}
+                    value={s}
+                    className={({ active }) =>
+                      `flex items-center justify-between px-4 py-2.5 text-[14px] cursor-pointer transition-colors ${active ? 'bg-violet-500/15 text-white' : 'text-white/70'
+                      }`
+                    }
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span>{s}</span>
+                        {selected && <Check size={14} className="text-violet-400" />}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </div>
+          </Listbox>
         </Field>
       </div>
 
@@ -138,11 +222,14 @@ function ContactForm() {
         />
       </Field>
 
+      {submitError && <p className="text-[12px] text-rose-400 mb-4">{submitError}</p>}
+
       <button
         type="submit"
-        className="w-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-[14px] font-semibold py-3.5 hover:opacity-90 transition-opacity"
+        disabled={submitting}
+        className="w-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-[14px] font-semibold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        Send message ↗
+        {submitting ? 'Sending...' : 'Send message ↗'}
       </button>
     </form>
   )
@@ -199,8 +286,7 @@ function ContactInfo() {
         <div className="flex items-center gap-2.5">
           {[Instagram, Twitter, Linkedin, Youtube].map((Icon, i) => (
 
-            <a
-              key={i}
+            <a key={i}
               href="#"
               aria-label="Social link"
               className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"

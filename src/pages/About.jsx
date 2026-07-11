@@ -3,7 +3,7 @@ import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
 import CtaBanner from '../components/CtaBanner'
 import Testimonials from '../components/TestimonialsSection'
-import { values, timeline, teamMembers } from '../data/siteData'
+import { timeline, teamMembers } from '../data/siteData'
 import { Rocket, Globe, Award } from 'lucide-react'
 
 export default function About() {
@@ -11,7 +11,6 @@ export default function About() {
     <PageTransition>
       <Hero />
       <MissionVisionBelief />
-      <Values />
       <Timeline />
       <Team />
       <Testimonials />
@@ -27,7 +26,7 @@ function Hero() {
       <Reveal className="relative max-w-3xl mx-auto text-center">
         <SectionHeading eyebrow="About" title="We're a studio for" accent="ambitious brands" dark />
         <p className="mt-5 text-white/60 text-[15px] max-w-xl mx-auto leading-relaxed">
-          A small, senior team that treats every project like it's our own company. We ship
+          A team  that treats every project like it's our own company. We ship
           faster, care harder, and design with obsession.
         </p>
       </Reveal>
@@ -61,7 +60,6 @@ function MissionVisionBelief() {
           return (
             <Reveal key={it.title} delay={i * 0.08}>
               <div className="group relative rounded-2xl border border-white/10 bg-white/[0.02] p-7 h-full overflow-hidden transition-all duration-300 hover:border-violet-500/40 hover:bg-white/[0.04]">
-                {/* glow on hover */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-violet-500/0 group-hover:bg-violet-500/20 rounded-full blur-[40px] transition-all duration-500" />
 
                 <div className="relative">
@@ -80,32 +78,6 @@ function MissionVisionBelief() {
   )
 }
 
-function Values() {
-  return (
-    <section className="bg-[#0a0a12] pb-24 sm:pb-28 px-6">
-      <div className="max-w-6xl mx-auto">
-        <Reveal>
-          <SectionHeading eyebrow="Values" title="What we" accent="stand for" align="left" />
-        </Reveal>
-
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {values.map((v, i) => (
-            <Reveal key={v.n} delay={i * 0.07}>
-              <div className="relative rounded-2xl bg-white/[0.03] border border-white/10 pl-6 pr-6 py-6 h-full overflow-hidden hover:border-white/20 transition-colors duration-300">
-                {/* colored gradient accent bar, left edge */}
-                <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-violet-500 via-fuchsia-500 to-orange-400" />
-
-                <p className="text-xs font-semibold text-violet-400 mb-3 tracking-wide">{v.n}</p>
-                <h3 className="text-base sm:text-lg font-bold text-white mb-2 leading-snug">{v.title}</h3>
-                <p className="text-[13.5px] sm:text-[14px] text-white/55 leading-relaxed">{v.desc}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
 function Timeline() {
   return (
     <section className="bg-[#0a0a12] py-24 px-6">

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Rocket, Share2, Globe, Code2, GraduationCap, ShoppingBag, Palette, Clapperboard,
   ArrowUpRight, Check, ChevronDown, TrendingUp, Users, Award, Headphones,
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PageTransition from '../components/PageTransition'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
@@ -15,6 +15,8 @@ import {
   capabilities, stats, processSteps, trustedBrands, faqs, portfolioItems,
 } from '../data/siteData'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
+import ProfileCard from '../animations/ProfileCard'
+import yourPhoto from '../assets/Photo.jpeg'
 
 
 const iconMap = { Rocket, Share2, Globe, Code2, GraduationCap, ShoppingBag, Palette, Clapperboard }
@@ -66,7 +68,7 @@ function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
-            Now booking Q3 — 2 slots left
+            Welcome to Creative Crew .
           </p>
 
           <h1 className="text-5xl sm:text-[64px] font-bold text-white tracking-[-0.03em] leading-[1.03] flex flex-wrap gap-x-3">
@@ -92,7 +94,7 @@ function Hero() {
           </h1>
 
           <p className="mt-6 text-white/55 text-[15.5px] max-w-lg leading-relaxed">
-            A premium studio for funnels, marketing, web, software, LMS & POS. We turn ambition
+            A premium studio for funnels, marketing, web, software. We turn ambition
             into revenue with obsessive craft.
           </p>
 
@@ -150,71 +152,32 @@ function Hero() {
 // drawing-in animation, replacing a plain bar chart for a more premium feel.
 function DashboardMock() {
   return (
-    <div className="relative rounded-[22px] border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 shadow-glow">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <p className="text-[13px] font-semibold text-white">Growth overview</p>
-          <p className="text-[11px] text-white/40">Last 30 days</p>
-        </div>
-        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-400/10 rounded-full px-2.5 py-1">
-          <TrendingUp size={11} /> +38.4%
-        </span>
-      </div>
-
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        {[['Revenue', '$142k'], ['Reach', '2.4M'], ['ROAS', '6.8x']].map(([l, v]) => (
-          <div key={l} className="rounded-xl bg-white/5 border border-white/10 p-3">
-            <p className="text-[10px] text-white/40 mb-1">{l}</p>
-            <p className="text-sm font-bold text-white">{v}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="h-32 rounded-xl bg-gradient-to-t from-violet-500/10 to-transparent border border-white/10 p-4">
-        <svg viewBox="0 0 300 100" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" />
-            </linearGradient>
-            <linearGradient id="chartStroke" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#7c3aed" />
-              <stop offset="100%" stopColor="#d946ef" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M0,80 L37,65 L75,72 L112,45 L150,52 L187,25 L225,35 L262,12 L300,18"
-            fill="none"
-            stroke="url(#chartStroke)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeDasharray="400"
-            className="animate-draw-line"
-          />
-          <path
-            d="M0,80 L37,65 L75,72 L112,45 L150,52 L187,25 L225,35 L262,12 L300,18 L300,100 L0,100 Z"
-            fill="url(#chartFill)"
-            stroke="none"
-          />
-        </svg>
-      </div>
-
-      {/* Floating badge for extra depth */}
-      <div className="absolute -bottom-4 -left-4 rounded-xl border border-white/10 bg-[#141221] px-3.5 py-2.5 shadow-card hidden sm:block">
-        <p className="text-[10px] text-white/40">Conversion rate</p>
-        <p className="text-sm font-bold text-emerald-400">+12.4%</p>
-      </div>
+    <div className="flex justify-center lg:justify-end">
+      <ProfileCard
+        name="Creative Crew"
+        title="Digital Studio"
+        handle="creativecrew"
+        status="Available for projects"
+        contactText="Book a call"
+        avatarUrl={yourPhoto}
+        miniAvatarUrl={yourPhoto}
+        showUserInfo
+        enableTilt
+        enableMobileTilt={false}
+        onContactClick={() => window.location.assign('/contact')}
+        behindGlowColor="rgba(124, 58, 237, 0.5)"
+        innerGradient="linear-gradient(145deg,#7c3aed44 0%,#d946ef33 100%)"
+      />
     </div>
   )
 }
-
 function TrustedBy() {
   // Duplicate the list so the marquee can loop seamlessly at -50%.
   const loop = [...trustedBrands, ...trustedBrands]
   return (
     <section className="bg-[#0a0a12] pb-24 px-6 overflow-hidden">
       <Reveal>
-        <p className="text-center text-[11px] tracking-[0.2em] uppercase text-white/30 mb-8">
+        <p className="text-center text-[15px] tracking-[0.2em] uppercase text-white/30 mb-8">
           Trusted by ambitious brands
         </p>
       </Reveal>
@@ -252,7 +215,7 @@ function CapabilityCard({ c, i, Icon }) {
           ${active ? "bg-violet-600" : "bg-[#0a0a12]"} group-hover:bg-violet-600
         `}
       >
-        Capabilities
+        Done for you
       </span>
 
       {/* tint overlay — mirrors hover overlay, driven by scroll on mobile */}
@@ -369,7 +332,7 @@ function Difference() {
             marketers who care too much.
           </p>
           <ul className="space-y-3.5">
-            {['Senior team — no juniors on your project', 'Fixed timelines, no surprises', 'Weekly Loom updates + Slack channel', 'Design that ships, engineering that scales'].map((f) => (
+            {['Senior team — no juniors on your project', 'Fixed timelines, no surprises', 'Weekly Loom updates + Slack channel', 'Design that ships, engineering that scales', 'Custom software Tracking'].map((f) => (
               <li key={f} className="flex items-start gap-3 text-[14px] text-white/70">
                 <span className="w-5 h-5 rounded-full bg-violet-500/15 flex items-center justify-center mt-0.5 shrink-0">
                   <Check size={11} className="text-violet-400" />
@@ -403,55 +366,124 @@ function Difference() {
   )
 }
 
-
-
-
-
 function Process() {
+  const [activeStep, setActiveStep] = useState(0)
+  const [lottieFailed, setLottieFailed] = useState(false)
+  const stepRefs = useRef([])
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.dataset.index)
+            setActiveStep(idx)
+            setLottieFailed(false) // reset fallback state when step changes
+          }
+        })
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    )
+    stepRefs.current.forEach((el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  const active = processSteps[activeStep]
+
   return (
-    <section className="relative bg-white py-16 sm:py-24 px-6 overflow-hidden">
-      {/* ambient glow behind the animation panel — now on the right */}
+    <section className="relative bg-white py-16 sm:py-24 px-6">
       <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto relative">
+      <div className="max-w-7xl mx-auto relative">
         <Reveal>
           <SectionHeading eyebrow="Our process" title="A six-step system," accent=" Built to win" align="left" />
         </Reveal>
 
-        <div className="sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          {/* Timeline — first in source order, so left on desktop / top on mobile */}
-          <div className="relative order-2 lg:order-1 mt-4 lg:mt-0">
+        {/* Sticky container — ref used only for debugging/measuring if needed.
+            The right panel's sticky range is bound to this grid row's height,
+            which is set by the taller left column. It releases the instant
+            this row ends, never bleeding into the next section. */}
+        <div ref={containerRef} className="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+
+          {/* LEFT — timeline, drives the scroll height of the whole row */}
+          <div className="relative order-2 lg:order-1">
             <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-violet-400 via-fuchsia-300 to-transparent" />
             {processSteps.map((s, i) => (
-              <Reveal key={s.n} delay={i * 0.06} className="relative pl-10 pb-10 sm:pb-12 last:pb-0">
-                <span className="absolute -left-[9px] top-1 w-[18px] h-[18px] rounded-full bg-white border-2 border-violet-500 flex items-center justify-center">
-                  <span className="w-[7px] h-[7px] rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500" />
+              <div
+                key={s.n}
+                ref={(el) => (stepRefs.current[i] = el)}
+                data-index={i}
+                className="relative pl-10 pb-12 sm:pb-14 lg:pb-28 last:pb-0"
+              >
+                <span
+                  className={`absolute -left-[9px] top-1 w-[18px] h-[18px] rounded-full bg-white border-2 flex items-center justify-center transition-colors duration-300 ${i === activeStep ? 'border-violet-500' : 'border-[#0a0a12]/15'
+                    }`}
+                >
+                  <motion.span
+                    animate={{ scale: i === activeStep ? 1 : 0.6, opacity: i === activeStep ? 1 : 0.3 }}
+                    transition={{ duration: 0.3 }}
+                    className={`w-[7px] h-[7px] rounded-full bg-gradient-to-br ${s.accent}`}
+                  />
                 </span>
-                <p className="text-xs font-semibold text-violet-500 mb-1">{s.n}</p>
-                <h3 className="text-lg sm:text-xl font-bold text-[#0a0a12] mb-1">{s.title}</h3>
+                <p className={`text-xs font-semibold mb-1 transition-colors duration-300 ${i === activeStep ? 'text-violet-500' : 'text-[#0a0a12]/35'}`}>
+                  {s.n}
+                </p>
+                <h3 className={`text-lg sm:text-xl font-bold mb-1 transition-colors duration-300 ${i === activeStep ? 'text-[#0a0a12]' : 'text-[#0a0a12]/50'}`}>
+                  {s.title}
+                </h3>
                 <p className="text-[13.5px] sm:text-[14px] text-[#0a0a12]/55 max-w-md">{s.desc}</p>
-              </Reveal>
+
+                <div
+                  className={`lg:hidden mt-3 h-[3px] w-10 rounded-full bg-gradient-to-r ${s.accent} transition-opacity duration-300 ${i === activeStep ? 'opacity-100' : 'opacity-30'
+                    }`}
+                />
+              </div>
             ))}
           </div>
 
-          {/* Animation panel — now on the right on desktop, shows above timeline on mobile */}
-          <div className="order-1 lg:order-2 lg:sticky lg:top-30 lg:self-start">
+          {/* RIGHT — sticky panel, desktop only */}
+          <div className="hidden lg:flex order-1 lg:order-2 lg:sticky lg:top-28 lg:self-start lg:h-fit">
             <Reveal>
-              <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-5 sm:p-8">
-                <div className="w-full h-[220px] sm:h-[320px] lg:h-[380px]">
-                  <DotLottieReact
-                    src="https://lottie.host/b053bae1-9ead-45cf-90aa-49acc580a6cc/ar3BS1uO71.lottie"
-                    loop
-                    autoplay
-                    style={{ width: '100%', height: '100%' }}
-                  />
+              <div className="relative rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-8 overflow-hidden w-full">
+                <div className="w-full h-[380px] relative">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeStep}
+                      initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -24, scale: 0.96 }}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      {!lottieFailed && active.lottie ? (
+                        <LottieWithFallback
+                          key={active.lottie}
+                          src={active.lottie}
+                          onError={() => setLottieFailed(true)}
+                        />
+                      ) : (
+                        <FallbackVisual accent={active.accent} label={active.title} />
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                {/* floating badge — moved to right edge to match new position */}
-                <div className="absolute -bottom-3 right-4 sm:-bottom-4 sm:-right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-card">
-                  <p className="text-[9px] sm:text-[10px] text-[#0a0a12]/40">Avg. delivery time</p>
-                  <p className="text-[13px] sm:text-sm font-bold text-violet-600">3.5 weeks</p>
-                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`badge-${activeStep}`}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute -bottom-4 -right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3.5 py-2.5 shadow-card"
+                  >
+                    <p className="text-[10px] text-[#0a0a12]/40">Step {active.n}</p>
+                    <p className={`text-sm font-bold bg-gradient-to-r ${active.accent} bg-clip-text text-transparent`}>
+                      {active.title}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </Reveal>
           </div>
@@ -461,6 +493,40 @@ function Process() {
   )
 }
 
+// Wraps DotLottieReact with a load timeout — if the animation hasn't
+// rendered within 3s (dead URL, network block, etc.), triggers onError
+// so the parent can swap in a fallback instead of showing a blank box.
+function LottieWithFallback({ src, onError }) {
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    setLoaded(false)
+    const timeout = setTimeout(() => {
+      if (!loaded) onError?.()
+    }, 3000)
+    return () => clearTimeout(timeout)
+  }, [src])
+
+  return (
+    <DotLottieReact
+      src={src}
+      loop
+      autoplay
+      style={{ width: '100%', height: '100%' }}
+      onLoad={() => setLoaded(true)}
+    />
+  )
+}
+
+// Simple gradient + step-number fallback shown if the Lottie file
+// fails or times out, so the panel is never an empty rectangle.
+function FallbackVisual({ accent, label }) {
+  return (
+    <div className={`w-40 h-40 rounded-3xl bg-gradient-to-br ${accent} flex items-center justify-center shadow-lg`}>
+      <span className="text-white text-4xl font-bold opacity-80">{label?.[0]}</span>
+    </div>
+  )
+}
 function FeaturedWork() {
   const featured = portfolioItems.slice(0, 4)
   return (
