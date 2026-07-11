@@ -47,10 +47,7 @@ const ProfileCardComponent = ({
     status = 'Online',
     contactText = 'Contact',
     showUserInfo = true,
-    onContactClick,
-    cardWidth = '500px',
-    cardMaxHeight = '540px',
-    aspectRatio = 0.718
+    onContactClick
 }) => {
     const wrapRef = useRef(null);
     const shellRef = useRef(null);
@@ -430,12 +427,14 @@ const ProfileCardComponent = ({
             )}
             <div ref={shellRef} className="relative z-[1] group">
                 <section
-                    className="grid relative overflow-hidden backface-hidden"
+                    className="grid relative overflow-hidden backface-hidden w-full"
                     style={{
-                        width: cardWidth,
-                        height: '80svh',
-                        maxHeight: cardMaxHeight,
-                        aspectRatio: aspectRatio,
+                        width: '100%',
+                        maxWidth: '400px',
+                        aspectRatio: '0.718',
+                        height: 'auto',
+                        maxHeight: '640px',
+                        margin: '0 auto',
                         borderRadius: cardRadius,
                         backgroundBlendMode: 'color-dodge, normal, normal, normal',
                         boxShadow:
@@ -444,6 +443,7 @@ const ProfileCardComponent = ({
                         transform: 'translateZ(0) rotateX(0deg) rotateY(0deg)',
                         background: 'rgba(0, 0, 0, 0.9)'
                     }}
+
                     onMouseEnter={e => {
                         e.currentTarget.style.transition = 'none';
                         e.currentTarget.style.transform = 'translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x))';
@@ -493,12 +493,8 @@ const ProfileCardComponent = ({
                                 style={{
                                     transformOrigin: '50% 100%',
                                     transform:
-                                        'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
+                                        'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scale(1.15) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
                                     borderRadius: cardRadius
-                                }}
-                                onError={e => {
-                                    const t = e.target;
-                                    t.style.display = 'none';
                                 }}
                             />
                             {showUserInfo && (
@@ -606,7 +602,7 @@ const ProfileCardComponent = ({
                     </div>
                 </section>
             </div>
-        </div>
+        </div >
     );
 };
 

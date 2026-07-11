@@ -21,7 +21,6 @@ export default function Navbar() {
   }, [])
 
   const menuItems = navLinks.map((l) => ({
-
     label: l.label,
     ariaLabel: `Go to ${l.label}`,
     link: l.to,
@@ -29,7 +28,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Desktop navbar */}
+      {/* Desktop navbar — hidden on mobile */}
       <header
         className={`hidden md:block fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0a12]/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'
           }`}
@@ -56,7 +55,6 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
-
             <a
               href="tel:+14155550142"
               className="flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/30 transition-colors"
@@ -66,9 +64,7 @@ export default function Navbar() {
             </a>
 
             <div className="relative group">
-              {/* blurred glow behind the button, hidden until hover */}
               <div className="absolute inset-0 rounded-full bg-violet-400/60 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
               <Link
                 to="/contact"
                 className="relative inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-md text-[#0a0a12] text-[14px] font-semibold px-4 py-2.5 border border-white/20 shadow-sm hover:bg-white/70 transition-colors duration-300"
@@ -77,27 +73,30 @@ export default function Navbar() {
               </Link>
             </div>
           </div>
-          {/* Mobile — StaggeredMenu owns its own logo, toggle, and panel */}
-          <div className="md:hidden">
-            <StaggeredMenu
-              position="right"
-              items={menuItems}
-              socialItems={socialItems}
-              displaySocials
-              displayItemNumbering
-              menuButtonColor="#ffffff"
-              openMenuButtonColor="#ffffff"
-              changeMenuColorOnOpen={false}
-              colors={['#7c3aed', '#0a0a12']}
-              logoUrl={cc}
-              logoAlt="Creative Crew"
-              logoWidth={32}
-              accentColor="#c4b5fd"
-              isFixed
-            />
-          </div>
         </nav>
       </header>
+
+      {/* Mobile — StaggeredMenu owns its own logo, toggle, and panel.
+          Lives OUTSIDE the desktop header so it isn't caught by its
+          "hidden md:block" and can render independently on small screens. */}
+      <div className="md:hidden fixed top-0 inset-x-0 z-50">
+        <StaggeredMenu
+          position="right"
+          items={menuItems}
+          socialItems={socialItems}
+          displaySocials
+          displayItemNumbering
+          menuButtonColor="#ffffff"
+          openMenuButtonColor="#ffffff"
+          changeMenuColorOnOpen={false}
+          colors={['#7c3aed', '#0a0a12']}
+          logoUrl={cc}
+          logoAlt="Creative Crew"
+          logoWidth={32}
+          accentColor="#c4b5fd"
+          isFixed
+        />
+      </div>
     </>
   )
 }

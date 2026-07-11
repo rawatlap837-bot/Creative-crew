@@ -9,7 +9,10 @@ html {
 body {
   @apply bg-base-950 text-white font-body antialiased;
 }
-
+html body {
+  overflow-x: hidden;
+  
+}
 h1, h2, h3, h4 {
   @apply font-display;
 }

@@ -15,8 +15,8 @@ import {
   capabilities, stats, processSteps, trustedBrands, faqs, portfolioItems,
 } from '../data/siteData'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
-import ProfileCard from '../animations/ProfileCard'
 import yourPhoto from '../assets/Photo.jpeg'
+import ProfileCard from '../animations/ProfileCard'
 
 
 const iconMap = { Rocket, Share2, Globe, Code2, GraduationCap, ShoppingBag, Palette, Clapperboard }
@@ -141,7 +141,23 @@ function Hero() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <DashboardMock />
+          <div className="max-w-sm mx-auto w-full">
+            <ProfileCard
+              name="Sohil Alvi"
+              title="Founder & Diredtor"
+              handle="creativecrew"
+              status="Available for work"
+              contactText="Book a call"
+              avatarUrl={yourPhoto}
+              showUserInfo={true}
+              enableTilt={true}
+              enableMobileTilt={false}
+              behindGlowEnabled
+              behindGlowColor="rgba(167, 139, 250, 0.55)"
+              innerGradient="linear-gradient(145deg,#7c3aed55 0%,#e879f944 100%)"
+              onContactClick={() => (window.location.href = '/contact')}
+            />
+          </div>
         </Reveal>
       </div>
     </section>
@@ -150,27 +166,7 @@ function Hero() {
 
 // Animated "growth dashboard" mockup — a smooth SVG line chart with a
 // drawing-in animation, replacing a plain bar chart for a more premium feel.
-function DashboardMock() {
-  return (
-    <div className="flex justify-center lg:justify-end">
-      <ProfileCard
-        name="Creative Crew"
-        title="Digital Studio"
-        handle="creativecrew"
-        status="Available for projects"
-        contactText="Book a call"
-        avatarUrl={yourPhoto}
-        miniAvatarUrl={yourPhoto}
-        showUserInfo
-        enableTilt
-        enableMobileTilt={false}
-        onContactClick={() => window.location.assign('/contact')}
-        behindGlowColor="rgba(124, 58, 237, 0.5)"
-        innerGradient="linear-gradient(145deg,#7c3aed44 0%,#d946ef33 100%)"
-      />
-    </div>
-  )
-}
+
 function TrustedBy() {
   // Duplicate the list so the marquee can loop seamlessly at -50%.
   const loop = [...trustedBrands, ...trustedBrands]
@@ -369,132 +365,150 @@ function Difference() {
 function Process() {
   const [activeStep, setActiveStep] = useState(0)
   const [lottieFailed, setLottieFailed] = useState(false)
-  const stepRefs = useRef([])
+  const [pinState, setPinState] = useState('before') // 'before' | 'pinned' | 'after'
   const containerRef = useRef(null)
+  const stepCount = processSteps.length
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = Number(entry.target.dataset.index)
-            setActiveStep(idx)
-            setLottieFailed(false) // reset fallback state when step changes
-          }
-        })
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
-    )
-    stepRefs.current.forEach((el) => el && observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+    setLottieFailed(false)
+  }, [activeStep])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = containerRef.current
+      if (!el) return
+
+      const rect = el.getBoundingClientRect()
+      const scrollableDistance = rect.height - window.innerHeight
+      if (scrollableDistance <= 0) return
+
+      let p = -rect.top / scrollableDistance
+      p = Math.min(Math.max(p, 0), 1)
+
+      const idx = Math.min(stepCount - 1, Math.floor(p * stepCount))
+      setActiveStep(idx)
+
+      if (rect.top > 0) {
+        setPinState('before')
+      } else if (rect.bottom <= window.innerHeight) {
+        setPinState('after')
+      } else {
+        setPinState('pinned')
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [stepCount])
 
   const active = processSteps[activeStep]
 
-  return (
-    <section className="relative bg-white py-16 sm:py-24 px-6">
-      <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
+  const content = (
+    <div className="w-full max-w-7xl mx-auto px-4">
+      <Reveal>
+        <SectionHeading eyebrow="Our process" title="A six-step system," accent=" Built to win" align="left" />
+      </Reveal>
 
-      <div className="max-w-7xl mx-auto relative">
-        <Reveal>
-          <SectionHeading eyebrow="Our process" title="A six-step system," accent=" Built to win" align="left" />
-        </Reveal>
+      {/* One step at a time — slides in from the right, out to the left */}
+      <div className="relative mt-10 sm:mt-5 min-h-[110px] sm:min-h-[130px] overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeStep}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-xs font-semibold mb-2 text-violet-500">{active.n}</p>
+            <h3 className="font-bold mb-2 text-2xl sm:text-3xl text-[#0a0a12]">{active.title}</h3>
+            <p className="text-[14px] sm:text-[15px] text-[#0a0a12]/55 max-w-lg">{active.desc}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        {/* Sticky container — ref used only for debugging/measuring if needed.
-            The right panel's sticky range is bound to this grid row's height,
-            which is set by the taller left column. It releases the instant
-            this row ends, never bleeding into the next section. */}
-        <div ref={containerRef} className="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+      {/* Progress dots */}
+      <div className="flex items-center gap-2 mt-6 sm:mt-1">
+        {processSteps.map((s, i) => (
+          <span
+            key={s.n}
+            className={`h-[3px] rounded-full transition-all duration-300 ${i === activeStep ? `w-8 bg-gradient-to-r ${s.accent}` : 'w-4 bg-[#0a0a12]/15'
+              }`}
+          />
+        ))}
+      </div>
 
-          {/* LEFT — timeline, drives the scroll height of the whole row */}
-          <div className="relative order-2 lg:order-1">
-            <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-violet-400 via-fuchsia-300 to-transparent" />
-            {processSteps.map((s, i) => (
-              <div
-                key={s.n}
-                ref={(el) => (stepRefs.current[i] = el)}
-                data-index={i}
-                className="relative pl-10 pb-12 sm:pb-14 lg:pb-28 last:pb-0"
+      {/* Lottie panel — rectangular, wide format */}
+      <div className="mt-10 sm:mt-14">
+        <div className="relative rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-6 sm:p-8 overflow-hidden w-full aspect-[16/9] max-h-[380px]">
+          <div className="w-full h-full relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeStep}
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -24, scale: 0.96 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 w-full h-full flex items-center justify-center"
               >
-                <span
-                  className={`absolute -left-[9px] top-1 w-[18px] h-[18px] rounded-full bg-white border-2 flex items-center justify-center transition-colors duration-300 ${i === activeStep ? 'border-violet-500' : 'border-[#0a0a12]/15'
-                    }`}
-                >
-                  <motion.span
-                    animate={{ scale: i === activeStep ? 1 : 0.6, opacity: i === activeStep ? 1 : 0.3 }}
-                    transition={{ duration: 0.3 }}
-                    className={`w-[7px] h-[7px] rounded-full bg-gradient-to-br ${s.accent}`}
+                {!lottieFailed && active.lottie ? (
+                  <LottieWithFallback
+                    key={active.lottie}
+                    src={active.lottie}
+                    onError={() => setLottieFailed(true)}
                   />
-                </span>
-                <p className={`text-xs font-semibold mb-1 transition-colors duration-300 ${i === activeStep ? 'text-violet-500' : 'text-[#0a0a12]/35'}`}>
-                  {s.n}
-                </p>
-                <h3 className={`text-lg sm:text-xl font-bold mb-1 transition-colors duration-300 ${i === activeStep ? 'text-[#0a0a12]' : 'text-[#0a0a12]/50'}`}>
-                  {s.title}
-                </h3>
-                <p className="text-[13.5px] sm:text-[14px] text-[#0a0a12]/55 max-w-md">{s.desc}</p>
-
-                <div
-                  className={`lg:hidden mt-3 h-[3px] w-10 rounded-full bg-gradient-to-r ${s.accent} transition-opacity duration-300 ${i === activeStep ? 'opacity-100' : 'opacity-30'
-                    }`}
-                />
-              </div>
-            ))}
+                ) : (
+                  <FallbackVisual label={active.title} />
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* RIGHT — sticky panel, desktop only */}
-          <div className="hidden lg:flex order-1 lg:order-2 lg:sticky lg:top-28 lg:self-start lg:h-fit">
-            <Reveal>
-              <div className="relative rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-8 overflow-hidden w-full">
-                <div className="w-full h-[380px] relative">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeStep}
-                      initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -24, scale: 0.96 }}
-                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0 flex items-center justify-center"
-                    >
-                      {!lottieFailed && active.lottie ? (
-                        <LottieWithFallback
-                          key={active.lottie}
-                          src={active.lottie}
-                          onError={() => setLottieFailed(true)}
-                        />
-                      ) : (
-                        <FallbackVisual accent={active.accent} label={active.title} />
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`badge-${activeStep}`}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute -bottom-4 -right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3.5 py-2.5 shadow-card"
-                  >
-                    <p className="text-[10px] text-[#0a0a12]/40">Step {active.n}</p>
-                    <p className={`text-sm font-bold bg-gradient-to-r ${active.accent} bg-clip-text text-transparent`}>
-                      {active.title}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </Reveal>
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`badge-${activeStep}`}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+              className="absolute bottom-4 right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3.5 py-2.5 shadow-card"
+            >
+              <p className="text-[10px] text-[#0a0a12]/40">Step {active.n}</p>
+              <p className={`text-sm font-bold bg-gradient-to-r ${active.accent} bg-clip-text text-transparent`}>
+                {active.title}
+              </p>
+            </motion.div>
+          </AnimatePresence>
         </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <section className="relative bg-white">
+      <div ref={containerRef} className="relative" style={{ height: `${stepCount * 100}vh` }}>
+        <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
+
+        {pinState === 'before' && (
+          <div className="absolute top-0 w-full py-16 sm:py-24">{content}</div>
+        )}
+        {pinState === 'after' && (
+          <div className="absolute bottom-0 w-full py-16 sm:py-24">{content}</div>
+        )}
+        {pinState === 'pinned' && (
+          <div className="fixed top-0 left-0 w-full py-16 sm:py-24 z-10">{content}</div>
+        )}
       </div>
     </section>
   )
 }
 
 // Wraps DotLottieReact with a load timeout — if the animation hasn't
-// rendered within 3s (dead URL, network block, etc.), triggers onError
+// rendered within 8s (dead URL, network block, etc.), triggers onError
 // so the parent can swap in a fallback instead of showing a blank box.
 function LottieWithFallback({ src, onError }) {
   const [loaded, setLoaded] = useState(false)
@@ -503,7 +517,7 @@ function LottieWithFallback({ src, onError }) {
     setLoaded(false)
     const timeout = setTimeout(() => {
       if (!loaded) onError?.()
-    }, 3000)
+    }, 8000)
     return () => clearTimeout(timeout)
   }, [src])
 
@@ -514,23 +528,32 @@ function LottieWithFallback({ src, onError }) {
       autoplay
       style={{ width: '100%', height: '100%' }}
       onLoad={() => setLoaded(true)}
+      onError={() => onError?.()}
     />
   )
 }
 
-// Simple gradient + step-number fallback shown if the Lottie file
-// fails or times out, so the panel is never an empty rectangle.
-function FallbackVisual({ accent, label }) {
+// Simple gradient + label fallback shown if the Lottie file fails or
+// times out, so the panel is never an empty rectangle.
+function FallbackVisual({ label }) {
   return (
-    <div className={`w-40 h-40 rounded-3xl bg-gradient-to-br ${accent} flex items-center justify-center shadow-lg`}>
+    <div
+      className="rounded-2xl flex items-center justify-center shadow-lg"
+      style={{
+        width: '140px',
+        height: '140px',
+        background: 'linear-gradient(to bottom right, #7c3aed, #d946ef)',
+      }}
+    >
       <span className="text-white text-4xl font-bold opacity-80">{label?.[0]}</span>
     </div>
   )
 }
+
 function FeaturedWork() {
   const featured = portfolioItems.slice(0, 4)
   return (
-    <section className="bg-[#0a0a12] py-24 px-6">
+    <section className="relative z-20 bg-[#0a0a12] py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <Reveal>
