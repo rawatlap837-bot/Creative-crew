@@ -14,7 +14,7 @@ export default function Portfolio() {
 
   return (
     <PageTransition>
-      <section className="relative pt-40 pb-12 px-6 bg-[#0a0a12] overflow-hidden">
+      <section className="relative pt-24 sm:pt-40 pb-12 px-6 bg-[#0a0a12] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.3),transparent_55%)]" />
         <Reveal className="relative max-w-3xl mx-auto text-center">
           <SectionHeading eyebrow="Portfolio" title="Selected" accent="work" dark />
@@ -28,11 +28,10 @@ export default function Portfolio() {
             <button
               key={cat}
               onClick={() => setActive(cat)}
-              className={`text-[13px] font-medium px-4 py-2 rounded-full border transition-colors ${
-                active === cat
+              className={`text-[13px] font-medium px-4 py-2 rounded-full border transition-colors ${active === cat
                   ? 'bg-white text-[#0a0a12] border-white'
                   : 'border-white/15 text-white/60 hover:text-white hover:border-white/30'
-              }`}
+                }`}
             >
               {cat}
             </button>

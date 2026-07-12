@@ -24,7 +24,7 @@ export default function Services() {
 
 function Hero() {
   return (
-    <section className="relative pt-40 pb-20 px-6 bg-[#0a0a12] overflow-hidden">
+    <section className="relative pt-24 sm:pt-40 pb-20 px-6 bg-[#0a0a12] overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.3),transparent_55%)]" />
       <Reveal className="relative max-w-3xl mx-auto text-center">
         <SectionHeading
@@ -79,9 +79,8 @@ function ServiceList() {
                   {s.stack.map((t) => (
                     <span
                       key={t}
-                      className={`text-[11px] px-2.5 py-1 rounded-full border ${
-                        dark ? 'border-white/15 text-white/50' : 'border-[#0a0a12]/15 text-[#0a0a12]/50'
-                      }`}
+                      className={`text-[11px] px-2.5 py-1 rounded-full border ${dark ? 'border-white/15 text-white/50' : 'border-[#0a0a12]/15 text-[#0a0a12]/50'
+                        }`}
                     >
                       {t}
                     </span>
@@ -103,9 +102,8 @@ function ServiceList() {
 
               <Reveal delay={0.1} className={i % 2 === 1 ? 'lg:order-1' : ''}>
                 <div
-                  className={`aspect-square rounded-3xl border flex flex-col justify-between p-8 ${
-                    dark ? 'border-white/10 bg-white/[0.03]' : 'border-[#0a0a12]/10 bg-gradient-to-br from-violet-50 to-fuchsia-50'
-                  }`}
+                  className={`aspect-square rounded-3xl border flex flex-col justify-between p-8 ${dark ? 'border-white/10 bg-white/[0.03]' : 'border-[#0a0a12]/10 bg-gradient-to-br from-violet-50 to-fuchsia-50'
+                    }`}
                 >
                   <span className={`w-11 h-11 rounded-xl flex items-center justify-center ${dark ? 'bg-white/10' : 'bg-[#0a0a12]'}`}>
                     <Icon size={18} className="text-white" />
@@ -146,15 +144,13 @@ function Faq() {
                   <span className="text-[14px] font-medium text-[#0a0a12]">{f.q}</span>
                   <ChevronDown
                     size={16}
-                    className={`text-[#0a0a12]/40 transition-transform duration-300 shrink-0 ml-4 ${
-                      openIndex === i ? 'rotate-180' : ''
-                    }`}
+                    className={`text-[#0a0a12]/40 transition-transform duration-300 shrink-0 ml-4 ${openIndex === i ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
                 <div
-                  className={`grid transition-all duration-300 ease-out ${
-                    openIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                  }`}
+                  className={`grid transition-all duration-300 ease-out ${openIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
                 >
                   <div className="overflow-hidden">
                     <p className="px-5 pb-4 text-[13.5px] text-[#0a0a12]/55 leading-relaxed">{f.a}</p>

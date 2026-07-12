@@ -174,6 +174,7 @@ const ProfileCardComponent = ({
 
     const handlePointerMove = useCallback(
         event => {
+            if (event.pointerType === 'touch') return; // mobile tilt uses deviceorientation, not touch-drag
             const shell = shellRef.current;
             if (!shell || !tiltEngine) return;
             const { x, y } = getOffsets(event, shell);
@@ -184,6 +185,7 @@ const ProfileCardComponent = ({
 
     const handlePointerEnter = useCallback(
         event => {
+            if (event.pointerType === 'touch') return;
             const shell = shellRef.current;
             if (!shell || !tiltEngine) return;
 
@@ -412,7 +414,7 @@ const ProfileCardComponent = ({
     return (
         <div
             ref={wrapRef}
-            className={`relative touch-none ${className}`.trim()}
+            className={`relative touch-pan- ${className}`.trim()}
             style={{ perspective: '500px', transform: 'translate3d(0, 0, 0.1px)', ...cardStyle }}
         >
             {behindGlowEnabled && (

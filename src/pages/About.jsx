@@ -21,7 +21,7 @@ export default function About() {
 
 function Hero() {
   return (
-    <section className="relative pt-40 pb-24 px-6 bg-[#0a0a12] overflow-hidden">
+    <section className="relative pt-24 sm:pt-40 px-6 bg-[#0a0a12] overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.3),transparent_55%)]" />
       <Reveal className="relative max-w-3xl mx-auto text-center">
         <SectionHeading eyebrow="About" title="We're a studio for" accent="ambitious brands" dark />

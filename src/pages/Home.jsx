@@ -17,6 +17,14 @@ import {
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import yourPhoto from '../assets/Photo.jpeg'
 import ProfileCard from '../animations/ProfileCard'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 
 const iconMap = { Rocket, Share2, Globe, Code2, GraduationCap, ShoppingBag, Palette, Clapperboard }
@@ -52,7 +60,7 @@ function Hero() {
   }, [])
 
   return (
-    <section className="relative pt-40 pb-28 px-6 overflow-hidden bg-[#0a0a12]">
+    <section className="relative pt-24 sm:pt-40 pb-28 px-6 overflow-hidden bg-[#0a0a12]">
       {/* Ambient background: radial glow + faint dot grid, masked to fade at edges */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.28),transparent_55%)]" />
       <div
@@ -362,11 +370,13 @@ function Difference() {
   )
 }
 
+'use client'
 function Process() {
   const [activeStep, setActiveStep] = useState(0)
+  const [progress, setProgress] = useState(0) // 0 → 1 across the whole section, drives the timeline fill
   const [lottieFailed, setLottieFailed] = useState(false)
-  const [pinState, setPinState] = useState('before') // 'before' | 'pinned' | 'after'
-  const containerRef = useRef(null)
+  const sectionRef = useRef(null) // the ScrollTrigger trigger — defines when pinning starts/ends
+  const pinRef = useRef(null) // the element that actually gets pinned
   const stepCount = processSteps.length
 
   useEffect(() => {
@@ -374,134 +384,157 @@ function Process() {
   }, [activeStep])
 
   useEffect(() => {
-    const handleScroll = () => {
-      const el = containerRef.current
-      if (!el) return
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia()
 
-      const rect = el.getBoundingClientRect()
-      const scrollableDistance = rect.height - window.innerHeight
-      if (scrollableDistance <= 0) return
+      // Pin distance differs by breakpoint so the pace feels right on both —
+      // more scroll distance on desktop for a slower, deliberate reveal;
+      // tighter on mobile so it doesn't feel like it's stuck forever.
+      mm.add(
+        {
+          isDesktop: '(min-width: 1024px)',
+          isMobile: '(max-width: 1023px)',
+        },
+        (context) => {
+          const { isDesktop } = context.conditions
+          const pxPerStep = isDesktop ? 600 : 380
 
-      let p = -rect.top / scrollableDistance
-      p = Math.min(Math.max(p, 0), 1)
+          const trigger = ScrollTrigger.create({
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: () => `+=${stepCount * pxPerStep}`,
+            pin: pinRef.current,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const idx = Math.min(stepCount - 1, Math.floor(self.progress * stepCount))
+              setProgress(self.progress)
+              setActiveStep((prev) => (prev === idx ? prev : idx))
+            },
+          })
 
-      const idx = Math.min(stepCount - 1, Math.floor(p * stepCount))
-      setActiveStep(idx)
+          return () => trigger.kill()
+        }
+      )
+    }, sectionRef)
 
-      if (rect.top > 0) {
-        setPinState('before')
-      } else if (rect.bottom <= window.innerHeight) {
-        setPinState('after')
-      } else {
-        setPinState('pinned')
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-    handleScroll()
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-    }
+    return () => ctx.revert()
   }, [stepCount])
 
   const active = processSteps[activeStep]
-
-  const content = (
-    <div className="w-full max-w-7xl mx-auto px-4">
-      <Reveal>
-        <SectionHeading eyebrow="Our process" title="A six-step system," accent=" Built to win" align="left" />
-      </Reveal>
-
-      {/* One step at a time — slides in from the right, out to the left */}
-      <div className="relative mt-10 sm:mt-5 min-h-[110px] sm:min-h-[130px] overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeStep}
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="text-xs font-semibold mb-2 text-violet-500">{active.n}</p>
-            <h3 className="font-bold mb-2 text-2xl sm:text-3xl text-[#0a0a12]">{active.title}</h3>
-            <p className="text-[14px] sm:text-[15px] text-[#0a0a12]/55 max-w-lg">{active.desc}</p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Progress dots */}
-      <div className="flex items-center gap-2 mt-6 sm:mt-1">
-        {processSteps.map((s, i) => (
-          <span
-            key={s.n}
-            className={`h-[3px] rounded-full transition-all duration-300 ${i === activeStep ? `w-8 bg-gradient-to-r ${s.accent}` : 'w-4 bg-[#0a0a12]/15'
-              }`}
-          />
-        ))}
-      </div>
-
-      {/* Lottie panel — rectangular, wide format */}
-      <div className="mt-10 sm:mt-14">
-        <div className="relative rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-6 sm:p-8 overflow-hidden w-full aspect-[16/9] max-h-[380px]">
-          <div className="w-full h-full relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 0.96 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0 w-full h-full flex items-center justify-center"
-              >
-                {!lottieFailed && active.lottie ? (
-                  <LottieWithFallback
-                    key={active.lottie}
-                    src={active.lottie}
-                    onError={() => setLottieFailed(true)}
-                  />
-                ) : (
-                  <FallbackVisual label={active.title} />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`badge-${activeStep}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
-              className="absolute bottom-4 right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3.5 py-2.5 shadow-card"
-            >
-              <p className="text-[10px] text-[#0a0a12]/40">Step {active.n}</p>
-              <p className={`text-sm font-bold bg-gradient-to-r ${active.accent} bg-clip-text text-transparent`}>
-                {active.title}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
-  )
+  const fillPercent = progress * 100
 
   return (
-    <section className="relative bg-white">
-      <div ref={containerRef} className="relative" style={{ height: `${stepCount * 100}vh` }}>
+    <section ref={sectionRef} className="relative bg-white">
+      {/* No more manual height={stepCount * 100vh} wrapper — GSAP's pinSpacing
+          creates the equivalent scroll space automatically based on `end`. */}
+      <div ref={pinRef} className="relative min-h-screen flex items-center py-16 sm:py-24 overflow-hidden">
         <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
 
-        {pinState === 'before' && (
-          <div className="absolute top-0 w-full py-16 sm:py-24">{content}</div>
-        )}
-        {pinState === 'after' && (
-          <div className="absolute bottom-0 w-full py-16 sm:py-24">{content}</div>
-        )}
-        {pinState === 'pinned' && (
-          <div className="fixed top-0 left-0 w-full py-16 sm:py-24 z-10">{content}</div>
-        )}
+        <div className="w-full max-w-7xl mx-auto px-4">
+          <Reveal>
+            <SectionHeading eyebrow="Our process" title="A five-step system," accent=" Built to win" align="left" />
+          </Reveal>
+
+          {/* Horizontal timeline: track fills continuously with scroll progress,
+              nodes activate as the timeline reaches them */}
+          <div className="relative mt-10 sm:mt-14 mb-10 sm:mb-14">
+            <div className="absolute left-0 right-0 top-[7px] h-[2px] bg-[#0a0a12]/10 rounded-full">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
+                style={{ width: `${fillPercent}%` }}
+              />
+            </div>
+            <div className="relative flex justify-between">
+              {processSteps.map((s, i) => {
+                const isActive = i === activeStep
+                const isDone = i < activeStep
+                return (
+                  <div key={s.n} className="flex flex-col items-center gap-2">
+                    <span
+                      className={`block w-4 h-4 rounded-full border-2 transition-all duration-300 ${isActive
+                        ? 'bg-indigo-600 border-indigo-600 scale-125'
+                        : isDone
+                          ? 'bg-indigo-600 border-indigo-600'
+                          : 'bg-white border-[#0a0a12]/15'
+                        }`}
+                    />
+                    <span
+                      className={`text-xs font-medium transition-colors duration-300 ${isActive || isDone ? 'text-[#0a0a12]' : 'text-[#0a0a12]/35'
+                        }`}
+                    >
+                      {s.title}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Lottie left, text right */}
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-center">
+            <div className="relative rounded-3xl bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-[#0a0a12]/5 p-6 sm:p-8 overflow-hidden w-full max-w-[420px] mx-auto lg:mx-0 aspect-square">
+              <div className="w-full h-full relative">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeStep}
+                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -24, scale: 0.96 }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0 w-full h-full flex items-center justify-center"
+                  >
+                    {!lottieFailed && active.lottie ? (
+                      <LottieWithFallback
+                        key={active.lottie}
+                        src={active.lottie}
+                        onError={() => setLottieFailed(true)}
+                      />
+                    ) : (
+                      <FallbackVisual label={active.title} />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`badge-${activeStep}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute bottom-4 right-4 rounded-xl border border-[#0a0a12]/10 bg-white px-3.5 py-2.5 shadow-card"
+                >
+                  <p className="text-[10px] text-[#0a0a12]/40">Step {active.n}</p>
+                  <p className={`text-sm font-bold bg-gradient-to-r ${active.accent} bg-clip-text text-transparent`}>
+                    {active.title}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="relative min-h-[180px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStep}
+                  initial={{ opacity: 0, x: 32, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, x: -32, filter: 'blur(10px)' }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >
+                  <p className="text-xs font-semibold mb-2 text-violet-500">{active.n}</p>
+                  <h3 className="font-bold text-3xl sm:text-4xl text-[#0a0a12] leading-tight mb-4">
+                    {active.title}
+                  </h3>
+                  <p className="text-[14px] sm:text-[15px] text-[#0a0a12]/55 max-w-lg">{active.desc}</p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -511,12 +544,12 @@ function Process() {
 // rendered within 8s (dead URL, network block, etc.), triggers onError
 // so the parent can swap in a fallback instead of showing a blank box.
 function LottieWithFallback({ src, onError }) {
-  const [loaded, setLoaded] = useState(false)
+  const loadedRef = useRef(false)
 
   useEffect(() => {
-    setLoaded(false)
+    loadedRef.current = false
     const timeout = setTimeout(() => {
-      if (!loaded) onError?.()
+      if (!loadedRef.current) onError?.()
     }, 8000)
     return () => clearTimeout(timeout)
   }, [src])
@@ -527,7 +560,7 @@ function LottieWithFallback({ src, onError }) {
       loop
       autoplay
       style={{ width: '100%', height: '100%' }}
-      onLoad={() => setLoaded(true)}
+      onLoad={() => { loadedRef.current = true }}
       onError={() => onError?.()}
     />
   )
@@ -549,7 +582,6 @@ function FallbackVisual({ label }) {
     </div>
   )
 }
-
 function FeaturedWork() {
   const featured = portfolioItems.slice(0, 4)
   return (

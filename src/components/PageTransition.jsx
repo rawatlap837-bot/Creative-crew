@@ -1,12 +1,9 @@
 import { motion } from 'framer-motion'
 
-// Wrap every page's content in this for a consistent fade + rise-in
-// on route change. Edit the variants below to change the animation
-// site-wide in one place.
 const variants = {
-  initial: { opacity: 0, y: 14 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
 }
 
 export default function PageTransition({ children }) {
@@ -16,7 +13,7 @@ export default function PageTransition({ children }) {
       initial="initial"
       animate="animate"
       exit="exit"
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

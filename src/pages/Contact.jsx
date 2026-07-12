@@ -14,7 +14,7 @@ const serviceOptions = services.map((s) => s.title)
 export default function Contact() {
   return (
     <PageTransition>
-      <section className="relative pt-40 pb-20 px-6 bg-[#0a0a12] overflow-hidden">
+      <section className="relative pt-24 sm:pt-40 pb-20 px-6 bg-[#0a0a12] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.3),transparent_55%)]" />
         <Reveal className="relative max-w-2xl mx-auto text-center">
           <SectionHeading eyebrow="Contact" title="Let's" accent="talk" dark />
