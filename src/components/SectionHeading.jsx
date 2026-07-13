@@ -18,7 +18,7 @@ export default function SectionHeading({
   return (
     <div className={`flex flex-col mb-3 ${alignment}`}>
       {eyebrow && (
-        <div className={`flex items-center gap-2.5 mb-6! ${isCenter ? 'justify-center' : ''}`}>
+        <div className={` pt-12 sm:pt-24 flex items-center gap-2.5 mb-6! ${isCenter ? 'justify-center' : ''}`}>
           <span className="w-6 h-px bg-gradient-to-r from-violet-500 to-fuchsia-400" />
           <p className="text-[11px] font-semibold tracking-[0.22em] uppercase text-violet-400">
             {eyebrow}

@@ -28,9 +28,10 @@ export const StaggeredMenu = ({
     const preLayersRef = useRef(null);
     const preLayerElsRef = useRef([]);
 
-    const plusHRef = useRef(null);
-    const plusVRef = useRef(null);
-    const iconRef = useRef(null);
+    const iconBar1Ref = useRef(null);
+    const iconBar2Ref = useRef(null);
+    const iconBar3Ref = useRef(null);
+    const spinTweenRef = useRef(null);
 
     const textInnerRef = useRef(null);
     const textWrapRef = useRef(null);
@@ -38,7 +39,6 @@ export const StaggeredMenu = ({
 
     const openTlRef = useRef(null);
     const closeTweenRef = useRef(null);
-    const spinTweenRef = useRef(null);
     const textCycleAnimRef = useRef(null);
     const colorTweenRef = useRef(null);
 
@@ -51,13 +51,9 @@ export const StaggeredMenu = ({
         const ctx = gsap.context(() => {
             const panel = panelRef.current;
             const preContainer = preLayersRef.current;
-
-            const plusH = plusHRef.current;
-            const plusV = plusVRef.current;
-            const icon = iconRef.current;
             const textInner = textInnerRef.current;
 
-            if (!panel || !plusH || !plusV || !icon || !textInner) return;
+            if (!panel || !textInner) return;
 
             let preLayers = [];
             if (preContainer) {
@@ -71,11 +67,12 @@ export const StaggeredMenu = ({
                 gsap.set(preContainer, { xPercent: 0, opacity: 1 });
             }
 
-            gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
-            gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
-            gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
-
             gsap.set(textInner, { yPercent: 0 });
+
+            const bars = [iconBar1Ref.current, iconBar2Ref.current, iconBar3Ref.current].filter(Boolean);
+            if (bars.length) {
+                gsap.set(bars, { y: 0, rotate: 0, opacity: 1, transformOrigin: '50% 50%' });
+            }
 
             if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor });
         });
@@ -214,25 +211,25 @@ export const StaggeredMenu = ({
     }, [position]);
 
     const animateIcon = useCallback((opening) => {
-        const icon = iconRef.current;
-        const h = plusHRef.current;
-        const v = plusVRef.current;
-        if (!icon || !h || !v) return;
+        const bar1 = iconBar1Ref.current;
+        const bar2 = iconBar2Ref.current;
+        const bar3 = iconBar3Ref.current;
+        if (!bar1 || !bar2 || !bar3) return;
 
         spinTweenRef.current?.kill();
 
         if (opening) {
-            gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
             spinTweenRef.current = gsap
                 .timeline({ defaults: { ease: 'power4.out' } })
-                .to(h, { rotate: 45, duration: 0.5 }, 0)
-                .to(v, { rotate: -45, duration: 0.5 }, 0);
+                .to(bar1, { y: 5.5, rotate: 45, duration: 0.45 }, 0)
+                .to(bar3, { y: -5.5, rotate: -45, duration: 0.45 }, 0)
+                .to(bar2, { opacity: 0, scaleX: 0, duration: 0.25 }, 0);
         } else {
             spinTweenRef.current = gsap
                 .timeline({ defaults: { ease: 'power3.inOut' } })
-                .to(h, { rotate: 0, duration: 0.35 }, 0)
-                .to(v, { rotate: 90, duration: 0.35 }, 0)
-                .to(icon, { rotate: 0, duration: 0.001 }, 0);
+                .to(bar1, { y: 0, rotate: 0, duration: 0.35 }, 0)
+                .to(bar3, { y: 0, rotate: 0, duration: 0.35 }, 0)
+                .to(bar2, { opacity: 1, scaleX: 1, duration: 0.3 }, 0.08);
         }
     }, []);
 
@@ -406,19 +403,10 @@ export const StaggeredMenu = ({
                             </span>
                         </span>
 
-                        <span
-                            ref={iconRef}
-                            className="sm-icon relative w-[14px] h-[14px] shrink-0 inline-flex items-center justify-center [will-change:transform]"
-                            aria-hidden="true"
-                        >
-                            <span
-                                ref={plusHRef}
-                                className="sm-icon-line absolute left-1/2 top-1/2 w-full h-[2px] bg-current rounded-[2px] -translate-x-1/2 -translate-y-1/2 [will-change:transform]"
-                            />
-                            <span
-                                ref={plusVRef}
-                                className="sm-icon-line sm-icon-line-v absolute left-1/2 top-1/2 w-full h-[2px] bg-current rounded-[2px] -translate-x-1/2 -translate-y-1/2 [will-change:transform]"
-                            />
+                        <span className="sm-icon" aria-hidden="true">
+                            <span ref={iconBar1Ref} className="sm-icon-bar" />
+                            <span ref={iconBar2Ref} className="sm-icon-bar" />
+                            <span ref={iconBar3Ref} className="sm-icon-bar" />
                         </span>
                     </button>
                 </header>
@@ -527,8 +515,24 @@ export const StaggeredMenu = ({
 .sm-scope .sm-toggle-textWrap { position: relative; margin-right: 0.5em; display: inline-block; height: 1em; overflow: hidden; white-space: nowrap; width: var(--sm-toggle-width, auto); min-width: var(--sm-toggle-width, auto); }
 .sm-scope .sm-toggle-textInner { display: flex; flex-direction: column; line-height: 1; }
 .sm-scope .sm-toggle-line { display: block; height: 1em; line-height: 1; }
-.sm-scope .sm-icon { position: relative; width: 14px; height: 14px; flex: 0 0 14px; display: inline-flex; align-items: center; justify-content: center; will-change: transform; }
-.sm-scope .sm-icon-line { position: absolute; left: 50%; top: 50%; width: 100%; height: 2px; background: currentColor; border-radius: 2px; transform: translate(-50%, -50%); will-change: transform; }
+
+.sm-scope .sm-icon {
+  position: relative;
+  width: 18px;
+  height: 13px;
+  flex: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.sm-scope .sm-icon-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+}
 .sm-scope .sm-line { display: none !important; }
 
 .sm-scope .staggered-menu-panel {

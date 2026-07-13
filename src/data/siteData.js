@@ -93,7 +93,7 @@ export const stats = [
 export const processSteps = [
   { n: "01", title: "Explore", desc: "Deep dive into your goals, users, and unfair advantages.", accent: "from-violet-500 to-fuchsia-500", lottie: "https://lottie.host/76bd5d4d-0d46-4515-8cc1-0819492469df/AHrXtcpk4H.lottie" },
   { n: "02", title: "Strategy", desc: "Positioning, funnels, KPIs — the master plan.", accent: "from-indigo-500 to-violet-500", lottie: "https://lottie.host/ecdad5e9-0856-4562-90cc-53597f00807b/Di4rkinwxG.lottie" },
-  { n: "03", title: "Design, Development", desc: "Fast, scalable, production-grade builds.", accent: "from-blue-500 to-violet-500", lottie: "https://lottie.host/f94b1858-6da9-4659-8e58-886a73c45363/s9v42HEscb.lottie" },
+  { n: "03", title: "Design & Development", desc: "Fast, scalable, production-grade builds.", accent: "from-blue-500 to-violet-500",lottie: "https://lottie.host/f94b1858-6da9-4659-8e58-886a73c45363/s9v42HEscb.lottie" },
   { n: "04", title: "Launch", desc: "A polished go-live your customers remember.", accent: "from-violet-500 to-purple-500", lottie: "https://lottie.host/4117192c-b817-4d64-8f12-35126a0db0e7/BYtrKA44hI.lottie" },
   { n: "05", title: "Growth", desc: "Iterate, optimize, compound — every week.", accent: "from-fuchsia-500 to-rose-500", lottie: "https://lottie.host/18b0c990-dc30-4c7c-b7c2-96db80cb9925/bjGxJFBwPi.json"
    },
