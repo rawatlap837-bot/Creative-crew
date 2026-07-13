@@ -247,7 +247,7 @@ function CapabilityCard({ c, i, Icon }) {
 
 function Capabilities() {
   return (
-    <section className="relative bg-[#fafafa] pt-12 sm:pt-24 pb-6 sm:pb-10 px-6 overflow-hidden">
+    <section className="relative bg-[#fafafa] pt-1 sm:pt-24 pb-6 sm:pb-10 px-6 overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-200/25 blur-[110px] rounded-full" />
 
       <svg
@@ -314,7 +314,7 @@ function Capabilities() {
 }
 function Difference() {
   return (
-    <section className="relative bg-[#0d0b16] pt-12 sm:pt-24 py-24 px-6 overflow-hidden">
+    <section className="relative bg-[#0d0b16] pt-1 sm:pt-24 py-24 px-6 overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-violet-600/10 blur-[100px]" />
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
         <Reveal>
@@ -392,7 +392,7 @@ function Process() {
 
           {/* Horizontal timeline: track fills continuously with scroll progress,
               nodes activate as the timeline reaches them */}
-          <div className="relative mt-10 sm:mt-14 mb-10 sm:mb-14">
+          <div className="relative pt-1 sm:pt-24 mt-10 sm:mt-14 mb-10 sm:mb-14">
             {/* left-2/right-2 (8px = half of the dots' w-4/16px) insets the
                 line so its 0%–100% range matches the dots' CENTERS, not the
                 row's raw edges — otherwise justify-between leaves each dot's
@@ -543,7 +543,7 @@ function FallbackVisual({ label }) {
 function FeaturedWork() {
   const featured = portfolioItems.slice(0, 4)
   return (
-    <section className="relative z-20 bg-[#0a0a12] pt-12 sm:pt-24 py-24 px-6">
+    <section className="relative z-20 bg-[#0a0a12] pt-1 sm:pt-24 py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <Reveal>
@@ -592,7 +592,7 @@ function FeaturedWork() {
 function Faq() {
   const [openIndex, setOpenIndex] = useState(0)
   return (
-    <section className="bg-[#0a0a12] pt-12 sm:pt-24 py-24 px-6">
+    <section className="bg-[#0a0a12] pt-1 sm:pt-24 py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <Reveal>
           <SectionHeading eyebrow="FAQ" title="Questions," accent="answered" dark />
