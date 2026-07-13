@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import cc from '../assets/cc.png';
+import { siteConfig } from '../data/siteData';
 const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
 
 const ANIMATION_CONFIG = {
@@ -341,10 +342,6 @@ const ProfileCardComponent = ({
         [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize, cardRadius]
     );
 
-    const handleContactClick = useCallback(() => {
-        onContactClick?.();
-    }, [onContactClick]);
-
     // Complex styles that require CSS variables and can't be done with Tailwind
     const shineStyle = {
         maskImage: 'var(--icon)',
@@ -531,15 +528,14 @@ const ProfileCardComponent = ({
                                             <div className="text-sm text-white/70 leading-none">{status}</div>
                                         </div>
                                     </div>
-                                    <button
-                                        className="rounded-lg px-4 py-3 text-xs font-semibold text-white cursor-pointer transition-all duration-200 ease-out hover:opacity-90 hover:-translate-y-px bg-gradient-to-r from-violet-500 to-fuchsia-500"
-                                        onClick={handleContactClick}
+                                    <a
+                                        href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
+                                        className="rounded-lg px-4 py-3 text-xs font-semibold text-white cursor-pointer transition-all duration-200 ease-out hover:opacity-90 hover:-translate-y-px bg-violet-600 hover:bg-violet-700 inline-flex items-center justify-center"
                                         style={{ pointerEvents: 'auto', display: 'block', gridArea: 'auto', borderRadius: '8px' }}
-                                        type="button"
-                                        aria-label={`Contact ${name || 'user'}`}
+                                        aria-label={`Call ${name || 'user'}`}
                                     >
                                         {contactText}
-                                    </button>
+                                    </a>
                                 </div>
                             )}
                         </div>
@@ -599,8 +595,8 @@ const ProfileCardComponent = ({
                         </div>
                     </div>
                 </section>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

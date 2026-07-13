@@ -9,7 +9,7 @@ export const siteConfig = {
   name: 'Creative Crew',
   tagline: 'Let\'s build something unforgettable.',
   email: '@creativecrew',
-  phone: '+91 123 456 7890',
+  phone: '+91 9971702329',
   location: 'Remote-first · San Francisco · Berlin',
   hours: 'Mon–Sat · 8am–7pm PT',
 }
