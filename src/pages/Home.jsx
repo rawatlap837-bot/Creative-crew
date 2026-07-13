@@ -204,7 +204,7 @@ function CapabilityCard({ c, i, Icon }) {
 
   return (
     <motion.div
-      className={`group relative h-full rounded-2xl border bg-white p-6 pt-7 overflow-visible transition-all duration-300
+      className={`group relative h-full rounded-2xl border bg-white p-6 pt-1 overflow-visible transition-all duration-300
         hover:shadow-[0_20px_40px_-15px_rgba(124,58,237,0.25)] hover:-translate-y-1 hover:border-violet-200
         ${active ? "shadow-[0_20px_40px_-15px_rgba(124,58,237,0.25)] -translate-y-1 border-violet-200" : "border-[#0a0a12]/10"}
       `}
@@ -382,7 +382,7 @@ function Process() {
     <section ref={sectionRef} className="relative bg-white">
       {/* No manual height={stepCount * 100vh} wrapper needed — useScrollPin's
           pinSpacing creates the equivalent scroll space automatically. */}
-      <div ref={pinRef} className="relative min-h-screen flex items-center py-1 sm:py-24 overflow-hidden">
+      <div ref={pinRef} className="relative min-h-screen flex items-center py-1  sm:py-24 overflow-hidden">
         <div className="absolute top-1/3 right-0 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] bg-violet-200/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
 
         <div className="w-full max-w-7xl mx-auto px-4">
