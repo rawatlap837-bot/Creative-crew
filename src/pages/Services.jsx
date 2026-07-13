@@ -126,7 +126,7 @@ function ServiceList() {
 function Faq() {
   const [openIndex, setOpenIndex] = useState(0)
   return (
-    <section className="bg-white pt-1 sm:pt-24 py-24 px-6">
+    <section className="bg-white pt-10 sm:pt-24 py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <Reveal>
           <SectionHeading eyebrow="FAQ" title="Questions," accent="answered" />

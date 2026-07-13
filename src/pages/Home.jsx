@@ -213,7 +213,7 @@ function CapabilityCard({ c, i, Icon }) {
 
   return (
     <motion.div
-      className={`group relative h-full rounded-2xl border bg-white p-6 pt-1 overflow-visible transition-all duration-300
+      className={`group relative h-full rounded-2xl border bg-white p-6 pt-10 overflow-visible transition-all duration-300
         hover:shadow-[0_20px_40px_-15px_rgba(124,58,237,0.25)] hover:-translate-y-1 hover:border-violet-200
         ${active ? "shadow-[0_20px_40px_-15px_rgba(124,58,237,0.25)] -translate-y-1 border-violet-200" : "border-[#0a0a12]/10"}
       `}
@@ -256,7 +256,7 @@ function CapabilityCard({ c, i, Icon }) {
 
 function Capabilities() {
   return (
-    <section className="relative bg-[#fafafa] pt-1 sm:pt-24 pb-6 sm:pb-10 px-6 overflow-hidden">
+    <section className="relative bg-[#fafafa] pt-10 sm:pt-24 pb-6 sm:pb-10 px-6 overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-200/25 blur-[110px] rounded-full" />
 
       <svg
@@ -323,7 +323,7 @@ function Capabilities() {
 }
 function Difference() {
   return (
-    <section className="relative bg-[#0d0b16] pt-1 sm:pt-24 py-24 px-6 overflow-hidden">
+    <section className="relative bg-[#0d0b16] pt-10 sm:pt-24 py-24 px-6 overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-violet-600/10 blur-[100px]" />
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
         <Reveal>
@@ -559,7 +559,7 @@ function FallbackVisual({ label }) {
 function FeaturedWork() {
   const featured = portfolioItems.slice(0, 4)
   return (
-    <section className="relative z-20 bg-[#0a0a12] pt-1 sm:pt-24 py-24 px-6">
+    <section className="relative z-20 bg-[#0a0a12] pt-10 sm:pt-24 py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <Reveal>
@@ -608,7 +608,7 @@ function FeaturedWork() {
 function Faq() {
   const [openIndex, setOpenIndex] = useState(0)
   return (
-    <section className="bg-[#0a0a12] pt-1 sm:pt-24 py-24 px-6">
+    <section className="bg-[#0a0a12] pt-10 sm:pt-24 py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <Reveal>
           <SectionHeading eyebrow="FAQ" title="Questions," accent="answered" dark />

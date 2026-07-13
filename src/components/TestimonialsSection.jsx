@@ -5,7 +5,7 @@ import { testimonials } from '../data/siteData'
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-white pt-1 sm:pt-24 py-24 px-6">
+    <section className="bg-white pt-10 sm:pt-24 py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <Reveal>
           <SectionHeading eyebrow="Kind words" title="Loved by" accent="founders & CMOs" align="left" />
